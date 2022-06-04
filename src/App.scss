@@ -1,6 +1,33 @@
+
+
 @font-face {
-    font-family: myFirstFont;
-    src: url(./JosefinSans-Regular.ttf);
+    font-family: IBMSans;
+    src: url(./IBM_Plex_Sans/IBMPlexSans-Regular.ttf) format('truetype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: IBMSans;
+    src: url(./IBM_Plex_Sans/IBMPlexSans-ExtraLight.ttf) format('truetype');
+    font-weight: 200;
+}
+
+@font-face {
+    font-family: IBMSans;
+    src: url(./IBM_Plex_Sans/IBMPlexSans-Light.ttf) format('truetype');
+    font-weight: lighter;
+}
+
+@font-face {
+    font-family: IBMSans;
+    src: url(./IBM_Plex_Sans/IBMPlexSans-Medium.ttf) format('truetype');
+    font-weight: medium;
+}
+
+@font-face {
+    font-family: IBMSans;
+    src: url(./IBM_Plex_Sans/IBMPlexSans-Bold.ttf) format('truetype');
+    font-weight: bold;
 }
 
 #windowFrame {
@@ -14,7 +41,7 @@
     top: 10px;
     left: 10px;
     font-size: 15px;
-    font-family: 'myFirstFont', sans-serif;
+    font-family: 'IBMSans', sans-serif;
 }
 
 .leader-line{
@@ -34,7 +61,7 @@
     position: absolute;
     z-index: 9999999;
     -webkit-tap-highlight-color: unset !important;
-    font-family: 'myFirstFont',
+    font-family: 'IBMSans',
     sans-serif;
 }
 
@@ -45,13 +72,13 @@
     border-radius: 5px;
     max-width: 280px;
     display: block;
-    background: blanchedalmond;
+    background: white;
     color: black;
-    font-family: 'myFirstFont',
+    font-family: 'IBMSans',
     sans-serif;
 
     &-1{
-        font-weight: bolder;
+        font-weight: 400;
         font-size: 17px;
     }
 
@@ -59,7 +86,7 @@
         padding-top: 15px;
         border-top: 1px solid white;
         padding-bottom: 15px;
-        font-weight: 500;
+        font-weight: 200;
         font-size: 16px;
         line-height: 20px;
     }
@@ -72,16 +99,22 @@
             all: unset;
             display: flex;
             justify-content: center;
-            font-family: 'myFirstFont',
+            font-family: 'IBMSans',
             sans-serif;
+            font-weight: 500;
             height: 12px;
             align-items: center;
-            width: max-content;
+            width: 100%;
             padding: 8px;
-            background: blanchedalmond;
-            color: black;
+            color: white;
             font-size: 14px;
-            border: 1px solid white;
+            background: #0d6efd;
+            &:hover{
+                cursor: pointer;
+                outline: 1px solid #0d6efd;
+                background-color: #ffffff;
+                color: #0d6efd
+            }
         }
     }
 }
@@ -107,6 +140,24 @@
     font-size: 15px;
     border: 1px solid black;
 
+    &-guide{
+        width: 101%;
+        margin: auto;
+        background: #cbcbcb;
+        border-radius: 14px;
+        padding: 3px;
+        padding-bottom: 7px;
+        margin-bottom: 10px;
+
+        &-div{
+            background: #FFFFFF;
+            box-shadow: 0 4px 15px rgb(0 0 0 / 25%);
+            border-radius: 10px;
+            padding: 6px;
+            box-sizing: border-box;
+        }
+    }
+
     &-titleBar{
         display: flex;
         justify-content: space-between;
@@ -126,15 +177,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: rgb(208, 55, 149);
+            background-color: #0d6efd;
             color: #ffffff;
             cursor: pointer;
 
             &:hover{
                 cursor: pointer;
-                border: 2px solid rgb(208, 55, 149);
+                outline: 2px solid #0d6efd;
                 background-color: #ffffff;
-                color: rgb(208, 55, 149)
+                color: #0d6efd
             }
         }
     }
@@ -145,14 +196,14 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: rgb(208, 55, 149);
+        background-color: #0d6efd;
         color: #ffffff;
 
         &:hover {
             cursor: pointer;
-            border: 2px solid rgb(208, 55, 149);
+            border: 2px solid #0d6efd;
             background-color: #ffffff;
-            color: rgb(208, 55, 149)
+            color: #0d6efd
         }
     }
 
@@ -239,16 +290,25 @@
             align-items: center;
         }
         &-6{
+
+            &-input-titleText{
+                height: 25px;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+            }
+
             display: block;
             input, textarea {
-                all: unset;
+                //all: unset;
                 border: 1px solid lightgray;
                 padding: 4px;
                 font-size: 14px;
                 box-sizing: border-box;
                 width: 100%;
-                font-family: 'myFirstFont',
+                font-family: 'IBMSans',
                 sans-serif;
+                font-weight: 200;
             }
         }
     }

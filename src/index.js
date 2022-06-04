@@ -9,7 +9,7 @@ function AppWrapper({ props }) {
 		walkScreensArr: [],
 		expandFlag: false,
 		screenAdded: true,
-		currentSelectedScreen: 0,
+		currentSelectedScreen: -1,
 	});
 	const lineRef = useRef(null);
 	const draggableRef = useRef(null);
@@ -100,20 +100,24 @@ function AppWrapper({ props }) {
 			lineRef.target.setOptions({
 				color: "white",
 				dash: { animation: true },
+				startSocket: "auto",
+				endPlug: currScreenSettings.arrowType
 			});
 
 			// Make Content -> div2 draggable
-			draggableRef.target = new PlainDraggable(div2);
+			draggableRef.target = new window.PlainDraggable(div2);
 			draggableRef.target.draggingClass = "";
 			draggableRef.target.movingClass = "";
 			draggableRef.target.draggableClass = "";
 			draggableRef.target.onMove = handleContentDrag;
+
+			draggableRef.target.position()
+			lineRef.target.position();
 		}
 	};
 
 	return (
 		<ScreenContext.Provider value={{ screenState, setScreenState }}>
-			{/* <div className="windowFrameOverlay"></div> */}
 			<App />
 		</ScreenContext.Provider>
 	);

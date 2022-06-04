@@ -3,6 +3,7 @@ import Draggable from "react-draggable";
 import { GrFormClose } from "react-icons/gr";
 import { MdExpandMore } from "react-icons/md";
 import { IoIosMove } from "react-icons/io";
+// import { ButtonSet, Button } from 'carbon-components-react'
 import ScreenComponent from "./components/ScreenComponent";
 
 import "./App.scss";
@@ -12,6 +13,7 @@ function App() {
 	const { screenState, setScreenState } = useContext(ScreenContext);
 	const [state, setState] = useState({
 		dragOn: false,
+		currentScreen: 1
 	});
 	const hoveredRef = useRef(null);
 	const keyRef = useRef(null);
@@ -21,6 +23,7 @@ function App() {
 		console.log("EasyTalk Extension actually started");
 		window.addEventListener("keydown", handleKeyDownListener);
 		window.addEventListener("mousemove", handleMouseMoveEvent, { passive: true });
+		windowFrameRef.current.style.pointerEvents = "none";
 
 		return () => {
 			window.removeEventListener("mousemove", handleMouseMoveEvent);
@@ -57,7 +60,6 @@ function App() {
 	const handleMouseMoveEvent = (e) => {
 		if (keyRef.target === "c" && screenState.walkScreensArr.length > 0) {
 			hoveredRef.target = document.elementFromPoint(e.clientX, e.clientY);
-			windowFrameRef.current.style.pointerEvents = "none";
 			let currScreenSettings = screenState.walkScreensArr[screenState.currentSelectedScreen];
 			// Remove old bounding boxes on the screen
 			let oldelem = document.getElementById("selectionpart");
@@ -76,8 +78,6 @@ function App() {
 			div1.style.height = `${sizes.height + 20}px`;
 			div1.style.boxShadow = `0 0 0 99999px rgb(${currScreenSettings.color.r} ${currScreenSettings.color.g} ${currScreenSettings.color.b} / ${currScreenSettings.opacity}0%)`;
 			document.body.appendChild(div1);
-		} else {
-			windowFrameRef.current.style.pointerEvents = "all";
 		}
 	};
 
@@ -137,13 +137,26 @@ function App() {
 			subtitle: "This is desmo subtitle",
 			dragged: false,
 			draggedSizes: {},
+			arrowType: "arrow3",
+			videoURL: "",
+			imageURL: ""
 		};
-		setScreenState((prevState) => ({ ...prevState, walkScreensArr: [...screenState.walkScreensArr, newScreenObj], screenAdded: true }));
-		setState((prevState) => ({ ...prevState, expandFlag: true }));
+		setScreenState((prevState) => ({ ...prevState, walkScreensArr: [...screenState.walkScreensArr, newScreenObj], screenAdded: true, currentSelectedScreen: prevState.currentSelectedScreen + 1}));
+		setState((prevState) => ({ ...prevState, expandFlag: true, currentScreen: 1 }));
 	};
 
+	const handleToggleScreen = (screenIdx) => {
+		let oldelem = document.getElementById("selectionpart");
+		if (oldelem) oldelem.remove();
+
+		let oldelem1 = document.getElementById("title-subtitle");
+		if (oldelem1) oldelem1.remove();
+		setState((prevState) => ({ ...prevState, expandFlag: true, currentScreen: screenIdx }));
+	}
+
 	const handleSaveScreens = () => {
-		//
+		console.log(JSON.stringify(screenState.walkScreensArr));
+		//setState((prevState) => ({ ...prevState, expandFlag: true, currentScreen: 2 }));
 	};
 
 	const cssStyle = {
@@ -162,19 +175,33 @@ function App() {
 				</div>
 				<div className="dragBox-menu">
 					<div onClick={handleNewWalkScreen}>New +</div>
-					<div>Saved</div>
-					<div>About</div>
+					<div onClick={() => handleToggleScreen(2)}>Saved</div>
+					<div onClick={() => handleToggleScreen(3)}>About</div>
 				</div>
-				{state.expandFlag && (
+
+				{state.currentScreen === 1 && state.expandFlag && (
 					<div className="dragBox-expanded" id="allScreens">
+						{screenState.walkScreensArr.length > 0 && (
+							<div className="dragBox-guide">
+								<div className="dragBox-guide-div">Press 'c' then hover over required element on page then Press 'd' to capture hovered element</div>
+							</div>
+						)}
 						<ScreenComponent />
 						{screenState.walkScreensArr.length > 0 && (
-							<div className="dragBox-submit">
+							<div onClick={handleSaveScreens} className="dragBox-submit">
 								<div onClick={handleSaveScreens}>submit</div>
 							</div>
 						)}
 					</div>
 				)}
+
+				{
+					state.currentScreen === 2 && state.expandFlag && <div className="dragBox-expanded"> Saved Screen </div>
+				}
+
+				{	
+					state.currentScreen === 3 && state.expandFlag && <div className="dragBox-expanded"> About Screen </div>
+				}
 				<div className="dragBox-expandable" style={{ transform: state.expandFlag ? "rotateX(180deg)" : "rotateX(0deg)" }}>
 					<MdExpandMore size={24} onClick={handleExpanded} />
 					<IoIosMove className="moveDragArea" />

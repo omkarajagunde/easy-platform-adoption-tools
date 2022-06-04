@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "EasyWalk - Make beautiful app feature walkthroughs",
-    "description": "Chrome extension that is used for Quicker data entry",
+    "description": "Chrome extension that is used for creating immersive and quick product tours",
     "version": "1.0.0",
     "action": {
         "default_icon": "favicon.ico",
@@ -13,18 +13,20 @@
     "content_scripts": [
         {
             "matches": ["<all_urls>"],
-            "js": ["content.js", "jquery.js"],
+            "js": ["jquery.js", "leader-line.min.js"],
             "run_at": "document_end"
         }
     ],
     "permissions": ["scripting"],
     "host_permissions": ["<all_urls>"],
-    "all_frames": false,
     "web_accessible_resources": [
         {
-        "resources": [ "index.html", "leader-line.min.js", "plain-draggable.min.js", "static/*" ],
+        "resources": [ "index.html", "leader-line.min.js", "jquery.js", "plain-draggable.min.js", "static/*" ],
         "matches": [ "<all_urls>" ]
         }
-    ]
+    ],
+    "content_security_policy": { 
+        "extension_pages": "script-src 'self'; default-src 'self';"
+    }
 
 }

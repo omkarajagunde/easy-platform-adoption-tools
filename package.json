@@ -1,5 +1,5 @@
 {
-  "name": "react-data-entry-chrome-extention",
+  "name": "easy-platform-adoption-tools",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -7,6 +7,9 @@
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.1",
     "@testing-library/user-event": "^12.2.0",
+    "carbon-components": "^10.56.0",
+    "carbon-components-react": "^7.18.0",
+    "carbon-icons": "^7.0.7",
     "faker": "^5.1.0",
     "leader-line": "^1.0.7",
     "plain-draggable": "^2.5.14",
@@ -21,7 +24,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "export INLINE_RUNTIME_CHUNK=false && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

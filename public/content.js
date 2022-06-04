@@ -4,14 +4,16 @@ if (typeof init === "undefined") {
 	function init() {
 		var ele = document.createElement("script");
 		var scriptPath = chrome.runtime.getURL("leader-line.min.js"); //verify the script path
+		console.log("leader-line.min.js scriptPath :: ", scriptPath);
 		ele.setAttribute("src", scriptPath);
 		document.body.appendChild(ele);
 
 		var ele1 = document.createElement("script");
-		var scriptPath = chrome.runtime.getURL("plain-draggable.min.js"); //verify the script path
-		ele1.setAttribute("src", scriptPath);
+		var scriptPath1 = chrome.runtime.getURL("plain-draggable.min.js"); //verify the script path
+		console.log("leader-line.min.js scriptPath1 :: ", scriptPath1);
+		ele1.setAttribute("src", scriptPath1);
 		document.body.appendChild(ele1);
-
+		
 		// eslint-disable-next-line no-undef
 		const extensionOrigin = "chrome-extension://" + chrome.runtime.id;
 		console.log(chrome.runtime, extensionOrigin, chrome.runtime.getURL("index.html"));
