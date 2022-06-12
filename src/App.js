@@ -3,17 +3,20 @@ import Draggable from "react-draggable";
 import { GrFormClose } from "react-icons/gr";
 import { MdExpandMore } from "react-icons/md";
 import { IoIosMove } from "react-icons/io";
-// import { ButtonSet, Button } from 'carbon-components-react'
-import ScreenComponent from "./components/ScreenComponent";
-
-import "./App.scss";
 import { ScreenContext } from "./contexts/ScreenContext";
+import ScreenComponent from "./components/ScreenComponent";
+import app from "./config/firebase";
+import { getDatabase } from "firebase/database";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import "./App.scss";
+const database = getDatabase(app);
 
 function App() {
 	const { screenState, setScreenState } = useContext(ScreenContext);
 	const [state, setState] = useState({
 		dragOn: false,
-		currentScreen: 1
+		currentScreen: 1,
+		savedScreenContent: []
 	});
 	const hoveredRef = useRef(null);
 	const keyRef = useRef(null);
@@ -24,6 +27,17 @@ function App() {
 		window.addEventListener("keydown", handleKeyDownListener);
 		window.addEventListener("mousemove", handleMouseMoveEvent, { passive: true });
 		windowFrameRef.current.style.pointerEvents = "none";
+
+		// const provider = new GoogleAuthProvider();
+		// const auth = getAuth(app);
+		// signInWithPopup(auth, provider)
+		// .then((result) => {
+			
+		// 	console.log(result);
+		// }).catch((error) => {
+			
+		// 	console.log(error);
+		// });
 
 		return () => {
 			window.removeEventListener("mousemove", handleMouseMoveEvent);
@@ -156,7 +170,16 @@ function App() {
 
 	const handleSaveScreens = () => {
 		console.log(JSON.stringify(screenState.walkScreensArr));
-		//setState((prevState) => ({ ...prevState, expandFlag: true, currentScreen: 2 }));
+		// database.ref('users/' + userId).set({
+		// 	username: name,
+		// 	email: email,
+		// 	profile_picture : imageUrl
+		// });
+		let str = `<script> window.walkScreensArr=${JSON.stringify(screenState.walkScreensArr)} </script>
+				   <script src="https://firebasestorage.googleapis.com/v0/b/easy-platform-adoption-tools.appspot.com/o/easy-platform-adoption-tools.css?alt=media&token=953c081e-076f-4a2e-a862-f44e3e747690"></script>
+				   <script src="https://firebasestorage.googleapis.com/v0/b/easy-platform-adoption-tools.appspot.com/o/easy-platform-adoption-tools.js?alt=media&token=ce290caf-5e26-41d5-b0b4-65e6e68d3279"></script>
+				  `
+		setState((prevState) => ({ ...prevState, expandFlag: true, savedScreenContent: [prevState.savedScreenContent, str] }));
 	};
 
 	const cssStyle = {
@@ -168,7 +191,7 @@ function App() {
 		<Draggable id="dragArea" axis="both" handle=".moveDragArea" defaultPosition={{ x: 0, y: 0 }} onStart={handleStart} onDrag={handleDrag} onStop={handleStop}>
 			<div className="dragBox" style={{ ...cssStyle }}>
 				<div className="dragBox-titleBar">
-					<div>WalkMeEasy</div>
+					<div>EPAT Product Tour</div>
 					<div>
 						<GrFormClose onClick={handleClose} />
 					</div>
@@ -196,7 +219,18 @@ function App() {
 				)}
 
 				{
-					state.currentScreen === 2 && state.expandFlag && <div className="dragBox-expanded"> Saved Screen </div>
+					state.currentScreen === 2 && state.expandFlag && <div className="dragBox-expanded"> 
+						{
+							state.savedScreenContent.map((content, idx) => {
+								return (
+									<div>
+										<div>Tour - #{idx + 1}</div>
+										<textarea value={content}></textarea>
+									</div>
+								)
+							})
+						}
+					</div>
 				}
 
 				{	

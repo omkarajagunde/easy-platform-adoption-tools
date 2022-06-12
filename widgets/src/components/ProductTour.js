@@ -1,139 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import Content from "./Content";
-
-var array = [
-    {
-        "color": {
-            "r": 105,
-            "g": 118,
-            "b": 137,
-            "a": 1
-        },
-        "opacity": "8",
-        "element": "html>body:nth-child(2)>div:nth-child(1)#__next>main>div.App>div:nth-child(2).bx--grid.mainGrid>div:nth-child(1).bx--row.mainGrid-row>div:nth-child(1).bx--col-lg-3.mainGrid-leftPanel>div:nth-child(1).mainGrid-avatar-and-details>div:nth-child(3).mainGrid-envSelector>div.bx--form-item>fieldset.bx--radio-button-group.bx--radio-button-group--label-right",
-        "style": "arrow-1",
-        "title": "Environment Selector",
-        "subtitle": "From here you can select a specific environment for which you can query data",
-        "dragged": true,
-        "draggedSizes": {
-            "left": 343,
-            "top": 75.40625
-        },
-        "arrowType": "arrow3",
-        "videoURL": "",
-        "imageURL": ""
-    },
-    {
-        "color": {
-            "r": 105,
-            "g": 118,
-            "b": 137,
-            "a": 1
-        },
-        "opacity": "8",
-        "element": "html>body:nth-child(2)>div:nth-child(1)#__next>main>div.App>div:nth-child(2).bx--grid.mainGrid>div:nth-child(1).bx--row.mainGrid-row>div:nth-child(1).bx--col-lg-3.mainGrid-leftPanel>div:nth-child(2).bx--side-nav__navigation.mainGrid-leftPanelNav>div:nth-child(2).bx--side-nav__submenu.leftSideBarMenuItem",
-        "style": "arrow-1",
-        "title": "Trial Orders",
-        "subtitle": "This is the navigation, from here you can view different orders",
-        "dragged": true,
-        "draggedSizes": {
-            "left": 485,
-            "top": 456.40625
-        },
-        "arrowType": "arrow3",
-        "videoURL": "",
-        "imageURL": ""
-    },
-    {
-        "color": {
-            "r": 105,
-            "g": 118,
-            "b": 137,
-            "a": 1
-        },
-        "opacity": "8",
-        "element": "html>body:nth-child(2)>div:nth-child(1)#__next>main>div.App>div:nth-child(2).bx--grid.mainGrid>div:nth-child(1).bx--row.mainGrid-row>div:nth-child(2).bx--col-lg-13.mainGrid-rightPanel>div.trialGrid>div:nth-child(2).trialGrid-filtersLine",
-        "style": "arrow-1",
-        "title": "Filters",
-        "subtitle": "These are the filters from here we can control the date between which we want to see the data, and apply field based filters as well",
-        "dragged": true,
-        "draggedSizes": {
-            "left": 269.4375,
-            "top": 399
-        },
-        "arrowType": "arrow3",
-        "videoURL": "",
-        "imageURL": ""
-    },
-    {
-        "color": {
-            "r": 105,
-            "g": 118,
-            "b": 137,
-            "a": 1
-        },
-        "opacity": "8",
-        "element": "html>body:nth-child(2)>div:nth-child(1)#__next>main>div.App>div:nth-child(2).bx--grid.mainGrid>div:nth-child(1).bx--row.mainGrid-row>div:nth-child(2).bx--col-lg-13.mainGrid-rightPanel>div.trialGrid>div:nth-child(3).trialGrid-sectionsToggler>div:nth-child(1).bx--tabs--scrollable>ul:nth-child(2).bx--tabs--scrollable__nav>li:nth-child(1).bx--tabs--scrollable__nav-item.bx--tabs__nav-item--selected.bx--tabs--scrollable__nav-item--selected>button.bx--tabs--scrollable__nav-link",
-        "style": "arrow-1",
-        "title": "Statistics",
-        "subtitle": "From here you can see the statistics for the Trial Orders",
-        "dragged": false,
-        "draggedSizes": {},
-        "arrowType": "arrow3",
-        "videoURL": "",
-        "imageURL": ""
-    },
-    {
-        "color": {
-            "r": 105,
-            "g": 118,
-            "b": 137,
-            "a": 1
-        },
-        "opacity": "8",
-        "element": "html>body:nth-child(2)>div:nth-child(1)#__next>main>div.App>div:nth-child(2).bx--grid.mainGrid>div:nth-child(1).bx--row.mainGrid-row>div:nth-child(2).bx--col-lg-13.mainGrid-rightPanel>div.trialGrid>div:nth-child(3).trialGrid-sectionsToggler>div:nth-child(1).bx--tabs--scrollable>ul:nth-child(2).bx--tabs--scrollable__nav>li:nth-child(2).bx--tabs--scrollable__nav-item>button#tab-2.bx--tabs--scrollable__nav-link",
-        "style": "arrow-1",
-        "title": "Analytics",
-        "subtitle": "From here you can view the analytics for the chosen filters",
-        "dragged": false,
-        "draggedSizes": {},
-        "arrowType": "arrow3",
-        "videoURL": "",
-        "imageURL": ""
-    },
-    {
-        "color": {
-            "r": 105,
-            "g": 118,
-            "b": 137,
-            "a": 1
-        },
-        "opacity": "8",
-        "element": "html>body:nth-child(2)>div:nth-child(1)#__next>main>div.App>div:nth-child(2).bx--grid.mainGrid>div:nth-child(1).bx--row.mainGrid-row>div:nth-child(2).bx--col-lg-13.mainGrid-rightPanel>div.trialGrid>div:nth-child(3).trialGrid-sectionsToggler>div:nth-child(2).bx--tab-content>div.trialGrid-dataTable>div:nth-child(1).bx--data-table-container",
-        "style": "arrow-1",
-        "title": "Table View",
-        "subtitle": "From here you can see the indivisual orders",
-        "dragged": true,
-        "draggedSizes": {
-            "left": 337.4375,
-            "top": 126.5
-        },
-        "arrowType": "arrow3",
-        "videoURL": "",
-        "imageURL": ""
-    }
-]
+import HelpToolBox from "./HelpToolBox";
 
 function ProductTour({ props }) {
 	const [state, setState] = useState({
-		walkScreensArr: array || props.walkScreensArr,
+		walkScreensArr: window.walkScreensArr,
 		expandFlag: false,
 		screenAdded: true,
 		currentSelectedScreen: 0,
+        expandHelpToolbar: false,
+        hotspotsActivated: false,
+        flowTriggeredFromHotspots: false
 	});
 	const lineRef = useRef(null);
 	const draggableRef = useRef(null);
+    const helpToolBoxRef = useRef(null);
 
 	useEffect(() => {
 		/**
@@ -142,7 +24,6 @@ function ProductTour({ props }) {
 		 * highlighting will be correct
 		 */
 		window.addEventListener("resize", renderHighlighter);
-
 		/**
 		 * This will paint the highlighting for current selected
 		 * screen every time when the props object is changed
@@ -180,12 +61,21 @@ function ProductTour({ props }) {
 
 	const renderHighlighter = () => {
 		console.log(state);
+        window.scrollTop = 0
 		// Remove old bounding boxes on the screen
 		let oldelem = document.getElementById("selectionpart");
 		if (oldelem) oldelem.remove();
 
 		let oldelem1 = document.getElementById("title-subtitle");
 		if (oldelem1) oldelem1.remove();
+
+        let helpToolBox = document.getElementById("helpToolBox");
+		if (helpToolBox) helpToolBox.remove();
+
+        if (state.hotspotsActivated){
+            let hotSoptElems = document.querySelectorAll(".info-icon")
+            hotSoptElems.forEach(hotspot => hotspot.remove())
+        }
 
 		if (lineRef.target) {
 			lineRef.target.remove();
@@ -197,10 +87,15 @@ function ProductTour({ props }) {
 			draggableRef.target = null;
 		}
 
+        if (helpToolBoxRef.target){
+            helpToolBoxRef.target.remove();
+            helpToolBoxRef.target = null
+        }
+
 		let currScreenSettings = state.walkScreensArr[state.currentSelectedScreen];
 		let toggledSelection = document.querySelector(currScreenSettings?.element || null);
 
-		if (toggledSelection) {
+		if (toggledSelection && !state.hotspotsActivated) {
 			let sizes = toggledSelection.getBoundingClientRect();
 			let div1 = document.createElement("div");
 			div1.setAttribute("id", "selectionpart");
@@ -219,7 +114,16 @@ function ProductTour({ props }) {
 			div2.style.left = currScreenSettings.dragged ? `${currScreenSettings.draggedSizes.left}px` : `${sizes.left - 5}px`;
 			document.body.appendChild(div2);
 
-			ReactDOM.render(<Content handleSkipClick={handleSkipClick} handlePrevious={handlePrevious} handleNext={handleNext} state={state} currScreenSettings={currScreenSettings} />, div2);
+			ReactDOM.render(
+                <Content 
+                    handleSkipClick={handleSkipClick} 
+                    handlePrevious={handlePrevious} 
+                    handleNext={handleNext} 
+                    handleBackToHotspots={handleBackToHotspots}
+                    state={state} 
+                    currScreenSettings={currScreenSettings} />, 
+                    div2
+            );
 
 			lineRef.target = new window.LeaderLine(div2, div1);
 			lineRef.target.setOptions({
@@ -239,10 +143,86 @@ function ProductTour({ props }) {
 			draggableRef.target.position()
 			lineRef.target.position();
 		}
+
+        if (state.hotspotsActivated){
+            state.walkScreensArr.forEach((screen, idx) => {
+                let newHotSpotElem = document.createElement("div")
+                newHotSpotElem.setAttribute("id", "selectionpart-" + idx);
+			    newHotSpotElem.classList.add("selectionpart");
+                newHotSpotElem.classList.add("info-icon")
+                newHotSpotElem.onclick = handleHotSpotClick
+                newHotSpotElem.innerHTML = 'i'
+                let elementToHotSpot = document.querySelector(screen.element)
+                if (elementToHotSpot){
+                    let sizes = elementToHotSpot.getBoundingClientRect();
+                    newHotSpotElem.style.top = `${sizes.top}px`;
+			        newHotSpotElem.style.left = `${sizes.left}px`;
+                    document.body.appendChild(newHotSpotElem)
+                }
+            })
+        }
+
+
+        if (state.currentSelectedScreen === -1){
+            let helpToolBox = document.createElement("div");
+			helpToolBox.setAttribute("id", "helpToolBox");
+			helpToolBox.classList.add("epat-toolbox");
+            document.body.appendChild(helpToolBox);
+            let dragToolBox = new window.PlainDraggable(helpToolBox)
+            dragToolBox.containment = {left: 0, top: 0, width: 0, height:"100%" };
+            ReactDOM.render(
+                <HelpToolBox 
+                    handleFullTourCheckbox={handleFullTourCheckbox} 
+                    handleHelpToolBoxClick={handleHelpToolBoxClick} 
+                    handleHotspots={handleHotspots}
+                    state={state} />, 
+                helpToolBox
+            );
+        }
 	};
 
+    const handleHotSpotClick = (eve) => {
+        if (state.hotspotsActivated){
+            let hotSoptElems = document.querySelectorAll(".info-icon")
+            hotSoptElems.forEach(hotspot => hotspot.remove())
+        }
+
+        let targetId = eve.target.id
+        targetId = parseInt(targetId.slice(-1))
+        setState(prevState => ({ ...prevState, currentSelectedScreen: targetId, hotspotsActivated: false, flowTriggeredFromHotspots: true }))
+    }
+
+    const handleHelpToolBoxClick = () => {
+        setState(prevState => ({ ...prevState, expandHelpToolbar: !prevState.expandHelpToolbar }))
+    }
+
+    const handleHotspots = () => {
+        setState(prevState => {
+            if (prevState.hotspotsActivated){
+                let hotSoptElems = document.querySelectorAll(".info-icon")
+                hotSoptElems.forEach(hotspot => hotspot.remove())
+            }
+            return { ...prevState, hotspotsActivated: !prevState.hotspotsActivated }
+        })
+    }
+
+    const handleFullTourCheckbox = () => {    
+        if (state.hotspotsActivated){
+            let hotSoptElems = document.querySelectorAll(".info-icon")
+            hotSoptElems.forEach(hotspot => hotspot.remove())
+        }
+        setState(prevState => ({ ...prevState, currentSelectedScreen: 0, hotspotsActivated: false, flowTriggeredFromHotspots: false }))
+    }
+
+    const handleBackToHotspots = () => {
+        setState(prevState => {
+            return { ...prevState, hotspotsActivated: !prevState.hotspotsActivated, flowTriggeredFromHotspots: false, expandHelpToolbar: true }
+        })
+    }
+
 	return (
-		<div></div>
+		<div>
+        </div>
 	);
 }
 
