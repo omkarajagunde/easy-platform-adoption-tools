@@ -1,0 +1,154 @@
+
+.bx--grid {
+    padding-right: unset !important; 
+    padding-left:  unset !important; 
+}
+
+.bx--row{
+    margin-right: unset;
+    margin-left: unset;
+}
+
+.bx--header{
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+    height: 60px;
+}
+
+.bx--header__name{
+    color: unset !important;
+}
+
+.bx--tabs--scrollable{
+    height: 60px;
+    border-bottom: 1px solid var(--cds-ui-04,#8d8d8d);
+    border-top: 1px solid var(--cds-ui-04,#8d8d8d);
+    padding-left: 1rem;
+}
+
+.subHeader{
+    margin-top: 60px;
+    color: black;
+    height: 40px;
+}
+
+.mainGrid{
+    margin-top: 100px;
+}
+
+.content{
+    all: unset;
+    position: sticky;
+    top: 100px;
+    scroll-behavior: smooth;
+
+    .bx--tile-group > div{
+        display: flex;
+    }
+    .bx--tile{
+        background-color: #161616;
+        color: #e0e0e0;
+        &:hover{
+            background-color: #262626;
+        }
+    }
+    &-bar{
+        display: flex;
+        width: 100%;
+        background-color: #161616;
+        padding-left: 2rem;
+    }
+    &-titleNum{
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+}
+
+.section{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    scroll-margin-top: -100px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    display: flex;
+    &-title{
+        font-weight: 600;
+        letter-spacing: 0;
+        color: #262626;
+    }
+    &-leftSide{
+        width: 25%;
+        padding: 17px;
+    }
+    &-rightSide{
+        width: 75%;
+        padding: 17px;
+    }
+    &-features{
+        display: flex;
+        width: 100%;
+    }
+    &-feature{
+        width: 50%;
+        height: 250px;
+        margin: 2px;
+        padding: 20px;
+        background-color: #f2f4f8;
+
+        div:nth-child(2){
+            margin-top: 16px;
+            font-weight: 400;
+            font-size: 20px;
+        }
+    }
+    &-2-title{
+        font-size: 26px;
+        font-weight: 600;
+        margin-bottom: 60px;
+    }
+    &-2-tiles{
+        display: flex;
+        width: 100%;
+    }
+    &-2-tile{
+        width: 50%;
+        background-color: white;
+        margin-left: 4px;
+    }
+}
+
+.mainHeader{
+    width: 100%;
+    height: 100%;
+
+    &-leftPanel{
+        margin: 25px;
+    }
+
+    &-title{
+        font-size: 4rem;
+        font-weight: 300;
+        color: var(--cds-interactive-01,#0f62fe)
+    }
+
+    &-subtitle{
+        font-size: 3.6rem;
+        font-weight: 300;
+    }
+
+    &-rightPanel{
+        padding-right: unset;
+        video{
+            height: 420px;
+        }
+    }
+
+    &-btns{
+        margin-top: 40px;
+    }
+
+    &-link{
+        margin-top: 15px;
+        font-size: 1rem;
+    }
+}

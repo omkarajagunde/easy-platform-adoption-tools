@@ -1,0 +1,30 @@
+{
+  "name": "webapp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "12.1.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "carbon-components": "^10.25.0",
+    "carbon-components-react": "^7.25.0",
+    "@carbon/charts-react": "^0.54.8",
+    "@carbon/ibmdotcom-react": "^1.26.0",
+    "@carbon/ibmdotcom-styles": "^1.24.0",
+    "@carbon/icons-react": "^10.22.0",
+    "passport": "^0.4.1",
+    "passport-ci-oidc": "^2.0.4",
+    "use-ssr": "^1.0.24",
+    "sass": "^1.46.0"
+  },
+  "devDependencies": {
+    "eslint": "8.18.0",
+    "eslint-config-next": "12.1.6"
+  }
+}
