@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Footer } from "@carbon/ibmdotcom-react";
 import Image from "next/image"
+import Link from 'next/link'
 import { Bee16 } from "@carbon/icons-react"
 import { Header, HeaderName, HeaderNavigation, HeaderMenuItem, HeaderMenu, SideNav } from 'carbon-components-react' 
 
@@ -9,6 +10,15 @@ import IBMGrayLogo from "../resources/icons/ibm.svg";
 import Bee from "../resources/icons/bee.svg";
 
 const SiteLayout = ({ children }) => {
+
+  const [ state, setState ] = useState({
+    currentTab: 0
+  })
+
+  const handleTabChange = (tabIdx) => {
+    setState(prevState => ({ ...prevState, currentTab: tabIdx }))
+  }
+
   return (
     <div className="App">
       <Header aria-label="IBM Platform Name">
@@ -33,9 +43,18 @@ const SiteLayout = ({ children }) => {
           />Guide
         </HeaderName>
         <HeaderNavigation aria-label="IBM [Platform]">
-          <HeaderMenuItem href="#" isCurrentPage>Overview</HeaderMenuItem>
-          <HeaderMenuItem href="#">Pricing</HeaderMenuItem>
-          <HeaderMenuItem href="#">About</HeaderMenuItem>
+          <HeaderMenuItem isCurrentPage={state.currentTab === 0} onClick={() => handleTabChange(0)}>
+            <Link className="navLink" href="/">Overview</Link>
+          </HeaderMenuItem>
+          <HeaderMenuItem isCurrentPage={state.currentTab === 1} onClick={() => handleTabChange(1)}>
+            <Link className="navLink"  href="/pricing">Pricing</Link>
+          </HeaderMenuItem>
+          <HeaderMenuItem isCurrentPage={state.currentTab === 2} onClick={() => handleTabChange(2)}>
+            <Link className="navLink"  href="/about">About</Link>
+          </HeaderMenuItem>
+          <HeaderMenuItem isCurrentPage={state.currentTab === 3} onClick={() => handleTabChange(3)}>
+            <Link className="navLink"  href="/generateToken">Generate Token</Link>
+          </HeaderMenuItem>
         </HeaderNavigation>
       </Header>
       <div className="bx--grid mainGrid">

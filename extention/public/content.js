@@ -17,6 +17,8 @@ if (typeof init === "undefined") {
 		// eslint-disable-next-line no-undef
 		const extensionOrigin = "chrome-extension://" + chrome.runtime.id;
 		console.log(chrome.runtime, extensionOrigin, chrome.runtime.getURL("index.html"));
+		console.log("BEEURL : ", chrome.runtime.getURL("bee.svg"))
+		window.beeURL = chrome.runtime.getURL("bee.svg")
 		// eslint-disable-next-line no-restricted-globals
 		if (!location.ancestorOrigins.contains(extensionOrigin)) {
 			// Fetch the local React index.html page

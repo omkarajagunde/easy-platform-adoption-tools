@@ -140,6 +140,11 @@
     font-size: 15px;
     border: 1px solid black;
 
+    &-titleText{
+        display: flex;
+        align-items: center;
+    }
+
     &-guide{
         width: 101%;
         margin: auto;
@@ -302,8 +307,7 @@
             input, textarea {
                 //all: unset;
                 border: 1px solid lightgray;
-                padding: 4px;
-                font-size: 14px;
+                font-size: 12px !important;
                 box-sizing: border-box;
                 width: 100%;
                 font-family: 'IBMSans',

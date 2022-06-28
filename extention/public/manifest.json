@@ -21,7 +21,7 @@
     "host_permissions": ["<all_urls>"],
     "web_accessible_resources": [
         {
-        "resources": [ "index.html", "leader-line.min.js", "jquery.js", "plain-draggable.min.js", "static/*" ],
+        "resources": [ "index.html", "leader-line.min.js", "jquery.js", "plain-draggable.min.js", "static/*", "bee.svg" ],
         "matches": [ "<all_urls>" ]
         }
     ],

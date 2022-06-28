@@ -1,6 +1,7 @@
 import { Button, ClickableTile, ExpandableTile, Link, RadioTile, TileBelowTheFoldContent, TileAboveTheFoldContent, Tile } from 'carbon-components-react'
 import React, { useState } from 'react'
 import { PlayOutline24, Download24, ArrowRight16, IbmDataReplication32, Devices32, Money32, DashboardReference32 } from "@carbon/icons-react"
+
 function index() {
 
     const [state, setState] = useState({

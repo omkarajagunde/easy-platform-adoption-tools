@@ -5,11 +5,7 @@ import { MdExpandMore } from "react-icons/md";
 import { IoIosMove } from "react-icons/io";
 import { ScreenContext } from "./contexts/ScreenContext";
 import ScreenComponent from "./components/ScreenComponent";
-import app from "./config/firebase";
-import { getDatabase } from "firebase/database";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import "./App.scss";
-const database = getDatabase(app);
 
 function App() {
 	const { screenState, setScreenState } = useContext(ScreenContext);
@@ -27,17 +23,6 @@ function App() {
 		window.addEventListener("keydown", handleKeyDownListener);
 		window.addEventListener("mousemove", handleMouseMoveEvent, { passive: true });
 		windowFrameRef.current.style.pointerEvents = "none";
-
-		// const provider = new GoogleAuthProvider();
-		// const auth = getAuth(app);
-		// signInWithPopup(auth, provider)
-		// .then((result) => {
-			
-		// 	console.log(result);
-		// }).catch((error) => {
-			
-		// 	console.log(error);
-		// });
 
 		return () => {
 			window.removeEventListener("mousemove", handleMouseMoveEvent);
@@ -153,7 +138,8 @@ function App() {
 			draggedSizes: {},
 			arrowType: "arrow3",
 			videoURL: "",
-			imageURL: ""
+			imageURL: "",
+			token: ""
 		};
 		setScreenState((prevState) => ({ ...prevState, walkScreensArr: [...screenState.walkScreensArr, newScreenObj], screenAdded: true, currentSelectedScreen: prevState.currentSelectedScreen + 1}));
 		setState((prevState) => ({ ...prevState, expandFlag: true, currentScreen: 1 }));
@@ -175,12 +161,31 @@ function App() {
 		// 	email: email,
 		// 	profile_picture : imageUrl
 		// });
-		let str = `<script> window.walkScreensArr=${JSON.stringify(screenState.walkScreensArr)} </script>
-				   <script src="https://firebasestorage.googleapis.com/v0/b/easy-platform-adoption-tools.appspot.com/o/easy-platform-adoption-tools.css?alt=media&token=953c081e-076f-4a2e-a862-f44e3e747690"></script>
-				   <script src="https://firebasestorage.googleapis.com/v0/b/easy-platform-adoption-tools.appspot.com/o/easy-platform-adoption-tools.js?alt=media&token=ce290caf-5e26-41d5-b0b4-65e6e68d3279"></script>
-				  `
-		setState((prevState) => ({ ...prevState, expandFlag: true, savedScreenContent: [prevState.savedScreenContent, str] }));
+		// let str = `<script> window.walkScreensArr=${JSON.stringify(screenState.walkScreensArr)} </script>
+		// 		   <script src="https://firebasestorage.googleapis.com/v0/b/easy-platform-adoption-tools.appspot.com/o/easy-platform-adoption-tools.css?alt=media&token=953c081e-076f-4a2e-a862-f44e3e747690"></script>
+		// 		   <script src="https://firebasestorage.googleapis.com/v0/b/easy-platform-adoption-tools.appspot.com/o/easy-platform-adoption-tools.js?alt=media&token=ce290caf-5e26-41d5-b0b4-65e6e68d3279"></script>
+		// 		  `
+		// setState((prevState) => ({ ...prevState, expandFlag: true, savedScreenContent: [prevState.savedScreenContent, str] }));
+
+		let reqOptions = {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ walkScreensArr: screenState.walkScreensArr, token: state.token })
+		}
+		fetch("https://localhost:9000/v1/api/tour", reqOptions).then((resp) => {
+			resp.json().then((result) => {
+				console.log("POST /v1/api/tour SUCCESS : ", result);
+			})
+		}).catch(err => {
+			console.log("POST /v1/api/tour ERR : ", err);
+		})
 	};
+
+	const handleTokenChange = (eve) => {
+		setState((prevState) => ({ ...prevState, token: eve.target.value }));
+	}
 
 	const cssStyle = {
 		cursor: state.dragOn ? "grabbing" : null,
@@ -191,13 +196,15 @@ function App() {
 		<Draggable id="dragArea" axis="both" handle=".moveDragArea" defaultPosition={{ x: 0, y: 0 }} onStart={handleStart} onDrag={handleDrag} onStop={handleStop}>
 			<div className="dragBox" style={{ ...cssStyle }}>
 				<div className="dragBox-titleBar">
-					<div>EPAT Product Tour</div>
+					<div className="dragBox-titleText">
+						Bee<img width="23px" height="23px" src={window.beeURL}/>Guide
+					</div>
 					<div>
 						<GrFormClose onClick={handleClose} />
 					</div>
 				</div>
 				<div className="dragBox-menu">
-					<div onClick={handleNewWalkScreen}>New +</div>
+					<div onClick={() => handleToggleScreen(1)}>Screens</div>
 					<div onClick={() => handleToggleScreen(2)}>Saved</div>
 					<div onClick={() => handleToggleScreen(3)}>About</div>
 				</div>
@@ -210,11 +217,15 @@ function App() {
 							</div>
 						)}
 						<ScreenComponent />
-						{screenState.walkScreensArr.length > 0 && (
-							<div onClick={handleSaveScreens} className="dragBox-submit">
+						<div className="dragBox-submit">
+							<div onClick={handleNewWalkScreen}>Add new screen +</div>
+						</div>
+						{
+							screenState.walkScreensArr.length > 0 &&
+							<div className="dragBox-submit" style={{ marginTop: "5px" }}>
 								<div onClick={handleSaveScreens}>submit</div>
 							</div>
-						)}
+						}
 					</div>
 				)}
 
@@ -234,7 +245,14 @@ function App() {
 				}
 
 				{	
-					state.currentScreen === 3 && state.expandFlag && <div className="dragBox-expanded"> About Screen </div>
+					state.currentScreen === 3 && state.expandFlag && 
+					<div className="dragBox-screen-6" style={{ margin: "10px" }}>
+						<div className="dragBox-screen-6-input-title">
+							<div className="dragBox-screen-6-input-titleText">Enter Token</div>
+							<div><textarea style={{ fontSize: "0.9rem" }} placeholder="e.g. 55e4bef7a37b799522b59b9bd4b0791203e75f21" onBlur={handleTokenChange} rows={2} /></div>
+						</div>
+						
+					</div>
 				}
 				<div className="dragBox-expandable" style={{ transform: state.expandFlag ? "rotateX(180deg)" : "rotateX(0deg)" }}>
 					<MdExpandMore size={24} onClick={handleExpanded} />
