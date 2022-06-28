@@ -174,13 +174,23 @@ function App() {
 			},
 			body: JSON.stringify({ walkScreensArr: screenState.walkScreensArr, token: state.token })
 		}
-		fetch("https://localhost:9000/v1/api/tour", reqOptions).then((resp) => {
-			resp.json().then((result) => {
-				console.log("POST /v1/api/tour SUCCESS : ", result);
-			})
-		}).catch(err => {
-			console.log("POST /v1/api/tour ERR : ", err);
-		})
+
+		chrome.runtime.sendMessage(document.getElementById("extId").innerHTML,{
+				contentScriptQuery: "postTour"
+				, reqOptions: reqOptions
+				, url: "https://localhost:9000/v1/api/tour"
+		}, function (response) {
+			if (!chrome.runtime.lastError) {
+				console.log("lastError : ", response);
+			} 
+			
+			if (response != undefined && response != "") {
+				console.log("POST /v1/api/tour SUCCESS : ", response);
+			}
+			else {
+				console.log("POST /v1/api/tour ERR : ", response);
+			}
+		});
 	};
 
 	const handleTokenChange = (eve) => {
@@ -197,7 +207,7 @@ function App() {
 			<div className="dragBox" style={{ ...cssStyle }}>
 				<div className="dragBox-titleBar">
 					<div className="dragBox-titleText">
-						Bee<img width="23px" height="23px" src={window.beeURL}/>Guide
+						Bee<img width="23px" height="23px" src={document.getElementById("beeURL").innerHTML}/>Guide
 					</div>
 					<div>
 						<GrFormClose onClick={handleClose} />

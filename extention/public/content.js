@@ -18,7 +18,6 @@ if (typeof init === "undefined") {
 		const extensionOrigin = "chrome-extension://" + chrome.runtime.id;
 		console.log(chrome.runtime, extensionOrigin, chrome.runtime.getURL("index.html"));
 		console.log("BEEURL : ", chrome.runtime.getURL("bee.svg"))
-		window.beeURL = chrome.runtime.getURL("bee.svg")
 		// eslint-disable-next-line no-restricted-globals
 		if (!location.ancestorOrigins.contains(extensionOrigin)) {
 			// Fetch the local React index.html page
@@ -29,6 +28,8 @@ if (typeof init === "undefined") {
 					const styleStashHTML = html.replace(/\/static\//g, `${extensionOrigin}/static/`);
 					// eslint-disable-next-line no-undef
 					$(styleStashHTML).appendTo("body");
+					$(`<div style="display: none" id="beeURL">${chrome.runtime.getURL("bee.svg")}</div>`).appendTo("body")
+					$(`<div style="display: none" id="extId">${chrome.runtime.id}</div>`).appendTo("body")
 				})
 				.catch((error) => {
 					console.warn(error);
