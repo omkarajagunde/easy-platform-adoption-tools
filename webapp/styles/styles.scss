@@ -83,6 +83,7 @@
     &-rightSide{
         width: 75%;
         padding: 17px;
+        position: relative;
     }
     &-features{
         display: flex;
@@ -121,6 +122,14 @@
         button{
             width: 100%;
         }
+    }
+
+    &-rightLock{
+        position: absolute;
+        right: 10px;
+        bottom: -340px;
+        pointer-events: none;
+        width: 740px;
     }
 }
 

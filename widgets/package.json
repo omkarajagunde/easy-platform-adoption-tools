@@ -19,8 +19,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build:prod": "node ./build-rewired.js && npm run clean && npm run move-index",
-    "move-prescripts": "uglifyjs public/leader-line.min.js public/plain-draggable.min.js build/temp.js -o build/easy-platform-adoption-tools.js",
-    "clean": "cd build && mv static/js/*.js temp.js && mv static/css/*.css easy-platform-adoption-tools.css && npm run move-prescripts && rm -r static",
+    "move-prescripts": "uglifyjs public/leader-line.min.js public/plain-draggable.min.js build/temp.js -o build/beeguide-tools.js",
+    "clean": "cd build && mv static/js/*.js temp.js && mv static/css/*.css beeguide-tools.css && npm run move-prescripts && rm -r static",
     "move-index": "cp public/index.html build/index.html"
   },
   "devDependencies": {

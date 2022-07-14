@@ -115,7 +115,7 @@ function index() {
                         </div>
                         <div className="section-generateToken-btn">
                             <FormLabel>Click to copy to clipboard</FormLabel>
-                            <CodeSnippet type="inline" feedback="Copied to clipboard" style={{ width: "max-content", padding: "15px", "background": "white" }}>{ `<script src="https://localhost:9001/beeGuide.js" token="YOUR TOKEN HERE"> </script>`}</CodeSnippet>
+                            <CodeSnippet type="inline" feedback="Copied to clipboard" style={{ width: "max-content", padding: "15px", "background": "white" }}>{ `<script src="https://localhost:9001/beeGuide.js" data-token="YOUR TOKEN HERE"> </script>`}</CodeSnippet>
                         </div>
                         
                     </div>

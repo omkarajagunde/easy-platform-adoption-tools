@@ -12,6 +12,7 @@ const { connectToDb } = require('./utils/mongoUtils');
 const handle = app.getRequestHandler()
 const crypto = require("crypto")
 const UserModel = require('./schemas/user')
+var cors = require('cors')
 
 app.prepare().then(() => {
 
@@ -19,6 +20,8 @@ app.prepare().then(() => {
     // initialise express app
     const server = express()
     server.use(express.json()) 
+    server.use(cors())
+
 
     server.use(cookieParser());
     server.use(session({ resave: 'true', saveUninitialized: 'true', secret: process.env.SESSION_SECRET }));
@@ -150,7 +153,7 @@ app.prepare().then(() => {
                 let email = req.session.passport.user._json.email
                 let userObj = await UserModel.user.findOne({ email: email });
                 if (userObj) {
-                    res.status(200).send({ status: 200, message: "profile details sent succesfully", data: { profile: userObj.profileObj, hashedToken: userObj.hashedToken } })
+                    res.status(200).send({ status: 200, message: "profile details sent succesfully", data: { profile: userObj, hashedToken: userObj.hashedToken } })
                 }else {
                     res.status(400).send({ status: 400, message: "No profile found, please login to get profile", data: [] })
                 }

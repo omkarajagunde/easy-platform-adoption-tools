@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
-import { Button, CodeSnippet, FormLabel } from "carbon-components-react";
-import { Login24, UserIdentification32 } from '@carbon/icons-react'
-import crypto from "crypto"
-
+import { Button, CodeSnippet, FormLabel, Accordion, AccordionItem } from "carbon-components-react";
+import { Login24 } from '@carbon/icons-react'
+import LockIcon from '../resources/icons/lock.svg'
 
 const GenerateToken = () => {
     const [ state, setState ] = useState({ 
@@ -35,7 +34,7 @@ const GenerateToken = () => {
 
   return (
     <div class="bx--grid" style={{ width: "100%" }}>
-        <div className='bx--row section' id="section-2" style={{ backgroundColor: "#f2f4f8", height: state.userProfileData !== null? "50vh": "100vh" }}>
+        <div className='bx--row section' id="section-2" style={{ backgroundColor: "#f2f4f8", paddingBottom: "150px", height: state.userProfileData !== null? "max-content": "100vh" }}>
             <div className="section-leftSide section-title">
                 How to generate token?
             </div>
@@ -60,27 +59,52 @@ const GenerateToken = () => {
                         <FormLabel>Click to copy to clipboard</FormLabel>
                         <CodeSnippet type="inline" feedback="Copied to clipboard" style={{ width: "max-content", padding: "15px", "background": "white" }}>{state.hash}</CodeSnippet>
                     </div>
+                    <img src={ LockIcon.src } className="section-rightLock"/>    
                 </div>
             }
         </div>
-        <div className='bx--row section' id="section-2" style={{ backgroundColor: "#f2f4f8", height: "max-content", display: state.userProfileData !== null? "flex": "none" }}>
-            <div className="section-leftSide section-title">
-                How to integrate created tours in my app?
-            </div>
-            <div className="section-rightSide">
-                <div className="section-2-title" style={{ lineHeight: "2.2rem", fontSize: "1.2rem" }}>
-                      To integrate tours just copy paste below  <CodeSnippet type="inline">{ "<script/>" }</CodeSnippet> tag in your root index.html or js file, then call<br />
-                    1. <CodeSnippet type="inline">{ "window.initBee()" }</CodeSnippet> to initialise all tours in your website<br />
-                    2. <CodeSnippet type="inline">{"window.triggerBeeTour(<tourId>)"}</CodeSnippet> to initialise particular tour on particular web page/ route<br/>
-                    3. <CodeSnippet type="inline">{"window.triggerBeeSpot(<tourId>, <screenIndex>)"}</CodeSnippet> to show hotspot for a feature.
+        {
+            state.userProfileData !== null &&
+            <div className='bx--row section' id="section-2" style={{ backgroundColor: "white", height: "max-content" }}>
+                <div className="section-leftSide section-title">
+                    My Tours
                 </div>
-                <div className="section-generateToken-btn">
-                    <FormLabel>Click to copy to clipboard</FormLabel>
-                    <CodeSnippet type="inline" feedback="Copied to clipboard" style={{ width: "max-content", padding: "15px", "background": "white" }}>{ `<script src="https://localhost:9001/beeGuide.js" token="${state.hash}"> </script>`}</CodeSnippet>
+                <div className="section-rightSide">
+                    <Accordion align='start' style={{ maxWidth: "800px" }}>
+                        {
+                            state.userProfileData.tours.map((tour, idx) => (
+                                <AccordionItem title={`${tour.tourName}`}>
+                                    <FormLabel>Tour id - </FormLabel>
+                                    <CodeSnippet type="single" style={{ width: "800px" }} >{tour.id}</CodeSnippet>
+                                    <FormLabel style={{ marginTop: "20px" }}>Tour Raw JSON - </FormLabel>
+                                    <CodeSnippet type="multi" style={{ width: "800px" }} >{ JSON.stringify(tour.arr, null, 4) }</CodeSnippet>
+                                </AccordionItem>
+                            ))          
+                        }
+                    </Accordion>
                 </div>
-                
-            </div>
-        </div>
+            </div>  
+        }
+        {
+            state.userProfileData !== null && 
+           <div className='bx--row section' id="section-1" style={{ backgroundColor: "#f2f4f8", height: "max-content" }}>
+                <div className="section-leftSide section-title">
+                    How to integrate created tours in my app?
+                </div>
+                <div className="section-rightSide">
+                    <div className="section-2-title" style={{ lineHeight: "2rem", fontSize: "1.1rem", maxWidth: "800px" }}>
+                        To integrate tours just copy paste below  <CodeSnippet type="inline">{ "<script/>" }</CodeSnippet> tag in your root index.html or js file<br />
+                        1. <CodeSnippet type="inline">{ "window.initBee()" }</CodeSnippet> to initialise all tours in your website<br />
+                        2. <CodeSnippet type="inline">{"window.triggerBeeTour(<tourId>)"}</CodeSnippet> to initialise particular tour on particular web page/ route<br/>
+                        3. <CodeSnippet type="inline">{"window.triggerBeeSpot(<tourId>, <screenIndex>)"}</CodeSnippet> to show hotspot for a feature.
+                    </div>
+                    <div className="section-generateToken-btn">
+                        <FormLabel>Click to copy to clipboard</FormLabel>
+                        <CodeSnippet type="inline" feedback="Copied to clipboard" style={{ width: "max-content", padding: "15px", "background": "white" }}>{ `<script id="beeguide-tools" src="https://localhost:9001/beeGuide.js" data-token="${state.hash}"> </script>`}</CodeSnippet>
+                    </div>
+                </div>
+            </div>   
+        }  
     </div>
   );
 };

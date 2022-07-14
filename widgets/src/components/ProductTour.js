@@ -3,9 +3,10 @@ import ReactDOM from "react-dom";
 import Content from "./Content";
 import HelpToolBox from "./HelpToolBox";
 
-function ProductTour({ props }) {
+function ProductTour(props) {
 	const [state, setState] = useState({
-		walkScreensArr: window.walkScreensArr,
+		tours: props.tours,
+		walkScreensArr: props.selectedTourArr || [],
 		expandFlag: false,
 		screenAdded: true,
 		currentSelectedScreen: 0,
