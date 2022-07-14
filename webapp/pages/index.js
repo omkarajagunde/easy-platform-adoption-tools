@@ -1,4 +1,4 @@
-import { Button, ClickableTile, ExpandableTile, Link, RadioTile, TileBelowTheFoldContent, TileAboveTheFoldContent, Tile } from 'carbon-components-react'
+import { Button, ClickableTile, ExpandableTile, Link, RadioTile, TileBelowTheFoldContent, TileAboveTheFoldContent, Tile, CodeSnippet, FormLabel } from 'carbon-components-react'
 import React, { useState } from 'react'
 import { PlayOutline24, Download24, ArrowRight16, IbmDataReplication32, Devices32, Money32, DashboardReference32 } from "@carbon/icons-react"
 
@@ -90,6 +90,7 @@ function index() {
                     </div>
                     <div className="section-rightSide">
                         Content of creation
+                        1. Press 'c' then hover over required element on page then Press 'd' to capture hovered element
                     </div>
                 </div>
                 <div className='bx--row section' id="section-4">
@@ -98,6 +99,25 @@ function index() {
                     </div>
                     <div className="section-rightSide">
                         Content for tour integration
+                    </div>
+                </div>
+                <div className='bx--row section' id="section-4" style={{ backgroundColor: "#f2f4f8", height: "max-content", display: state.userProfileData !== null? "flex": "none" }}>
+                    <div className="section-leftSide section-title">
+                        How to integrate created tours in my app?
+                    </div>
+                    <div className="section-rightSide">
+                        <div className="section-2-title" style={{ lineHeight: "2.2rem", fontSize: "1rem" }}>
+                            1. To to <Link href='/generateToken'>Genrate Token page</Link> Signup/Sign in with your IBMid then a token will be generated for you <br/>
+                            2. Place this token in below script and to integrate tours just copy paste below  <CodeSnippet type="inline">{"<script/>"}</CodeSnippet> tag in your root index.html or js file<br />
+                            3. Call <CodeSnippet type="inline">{ "window.initBee()" }</CodeSnippet> to initialise all tours in your website<br />
+                            4. Call <CodeSnippet type="inline">{"window.triggerBeeTour(<tourId>)"}</CodeSnippet> to initialise particular tour on particular web page/ route<br/>
+                            5. Call <CodeSnippet type="inline">{"window.triggerBeeSpot(<tourId>, <screenIndex>)"}</CodeSnippet> to show hotspot for a feature.
+                        </div>
+                        <div className="section-generateToken-btn">
+                            <FormLabel>Click to copy to clipboard</FormLabel>
+                            <CodeSnippet type="inline" feedback="Copied to clipboard" style={{ width: "max-content", padding: "15px", "background": "white" }}>{ `<script src="https://localhost:9001/beeGuide.js" token="YOUR TOKEN HERE"> </script>`}</CodeSnippet>
+                        </div>
+                        
                     </div>
                 </div>
             </>

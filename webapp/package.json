@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "env-cmd -f .env node ./server/index.js",
-    "dev-client": "npx kill-port 9000 && npx kill-port 9001 &&npm run start-proxy && env-cmd -f .env node ./server/index.js",
+    "dev-client": "npx kill-port 9000 9001 && npm run start-proxy && env-cmd -f .env node ./server/index.js",
     "start-proxy": "local-ssl-proxy --source 9000 --target 9001 &",
     "build": "next build",
     "start": "next start",
@@ -16,6 +16,7 @@
     "@carbon/ibmdotcom-styles": "^1.24.0",
     "@carbon/icons-react": "^10.22.0",
     "@cloudnative/health-connect": "^2.1.0",
+    "@hapi/joi": "^17.1.1",
     "axios": "^0.27.2",
     "carbon-components": "^10.25.0",
     "carbon-components-react": "^7.25.0",
@@ -27,6 +28,8 @@
     "express-session": "^1.17.2",
     "moment": "^2.29.1",
     "mongodb": "^4.4.1",
+    "mongoose": "^6.3.1",
+    "nanoid": "^4.0.0",
     "next": "12.1.6",
     "next-connect": "^0.6.1",
     "passport": "^0.4.1",
@@ -34,12 +37,10 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-router-dom": "^6.3.0",
-    "mongoose": "^6.3.1",
     "sass": "^1.46.0",
     "sharp": "^0.30.6",
     "use-ssr": "^1.0.24",
-    "uuidv4": "6.2.5",
-    "@hapi/joi": "^17.1.1"
+    "uuidv4": "6.2.5"
   },
   "devDependencies": {
     "eslint": "8.18.0",

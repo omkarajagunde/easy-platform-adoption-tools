@@ -1,11 +1,16 @@
 {
     "manifest_version": 3,
-    "name": "EasyWalk - Make beautiful app feature walkthroughs",
+    "name": "BeeGuide - Make beautiful app feature walkthroughs",
     "description": "Chrome extension that is used for creating immersive and quick product tours",
     "version": "1.0.0",
+    "icons": {
+        "16": "bee.svg",
+        "48": "bee.svg",
+        "128":"bee.svg"
+    },
     "action": {
         "default_icon": "favicon.ico",
-        "default_title": "EasyWalk"
+        "default_title": "BeeGuide"
     },
     "background": {
         "service_worker": "background.js"
@@ -24,9 +29,6 @@
         "resources": [ "index.html", "leader-line.min.js", "jquery.js", "plain-draggable.min.js", "static/*", "bee.svg" ],
         "matches": [ "<all_urls>" ]
         }
-    ],
-    "content_security_policy": { 
-        "extension_pages": "script-src 'self'; default-src 'self';"
-    }
+    ]
 
 }

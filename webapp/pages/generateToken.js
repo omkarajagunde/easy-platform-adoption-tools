@@ -35,7 +35,7 @@ const GenerateToken = () => {
 
   return (
     <div class="bx--grid" style={{ width: "100%" }}>
-        <div className='bx--row section' id="section-2" style={{ backgroundColor: "#f2f4f8", height: "80vh" }}>
+        <div className='bx--row section' id="section-2" style={{ backgroundColor: "#f2f4f8", height: state.userProfileData !== null? "50vh": "100vh" }}>
             <div className="section-leftSide section-title">
                 How to generate token?
             </div>
@@ -62,6 +62,24 @@ const GenerateToken = () => {
                     </div>
                 </div>
             }
+        </div>
+        <div className='bx--row section' id="section-2" style={{ backgroundColor: "#f2f4f8", height: "max-content", display: state.userProfileData !== null? "flex": "none" }}>
+            <div className="section-leftSide section-title">
+                How to integrate created tours in my app?
+            </div>
+            <div className="section-rightSide">
+                <div className="section-2-title" style={{ lineHeight: "2.2rem", fontSize: "1.2rem" }}>
+                      To integrate tours just copy paste below  <CodeSnippet type="inline">{ "<script/>" }</CodeSnippet> tag in your root index.html or js file, then call<br />
+                    1. <CodeSnippet type="inline">{ "window.initBee()" }</CodeSnippet> to initialise all tours in your website<br />
+                    2. <CodeSnippet type="inline">{"window.triggerBeeTour(<tourId>)"}</CodeSnippet> to initialise particular tour on particular web page/ route<br/>
+                    3. <CodeSnippet type="inline">{"window.triggerBeeSpot(<tourId>, <screenIndex>)"}</CodeSnippet> to show hotspot for a feature.
+                </div>
+                <div className="section-generateToken-btn">
+                    <FormLabel>Click to copy to clipboard</FormLabel>
+                    <CodeSnippet type="inline" feedback="Copied to clipboard" style={{ width: "max-content", padding: "15px", "background": "white" }}>{ `<script src="https://localhost:9001/beeGuide.js" token="${state.hash}"> </script>`}</CodeSnippet>
+                </div>
+                
+            </div>
         </div>
     </div>
   );

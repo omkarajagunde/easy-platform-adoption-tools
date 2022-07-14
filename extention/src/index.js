@@ -10,6 +10,7 @@ function AppWrapper({ props }) {
 		expandFlag: false,
 		screenAdded: true,
 		currentSelectedScreen: -1,
+		tourName: ""
 	});
 	const lineRef = useRef(null);
 	const draggableRef = useRef(null);

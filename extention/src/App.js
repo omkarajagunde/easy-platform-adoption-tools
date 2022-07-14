@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import Draggable from "react-draggable";
 import { GrFormClose } from "react-icons/gr";
-import { MdExpandMore } from "react-icons/md";
+import { MdExpandMore, MdEdit, MdDelete, MdClose } from "react-icons/md";
 import { IoIosMove } from "react-icons/io";
 import { ScreenContext } from "./contexts/ScreenContext";
 import ScreenComponent from "./components/ScreenComponent";
@@ -12,11 +12,44 @@ function App() {
 	const [state, setState] = useState({
 		dragOn: false,
 		currentScreen: 1,
-		savedScreenContent: []
+		savedScreenContent: [],
+		isSaveErrored: false,
+		saveMessage: null
 	});
 	const hoveredRef = useRef(null);
 	const keyRef = useRef(null);
 	const windowFrameRef = useRef(document.getElementById("windowFrame"));
+	const bodyRef = useRef(document.body.getBoundingClientRect())
+
+	useEffect(() => {
+		window.addEventListener("api-res", (event) => {
+			console.log("RESponse EVENT :: ", event.detail);
+			if (event.detail.contentScriptQuery === "postTour"){
+				if (event.detail.status === 400){
+					setState((prevState) => ({ ...prevState, isSaveErrored: true, saveMessage: event.detail.message }))
+					document.getElementById("notifyDiv")?.scrollIntoView()
+				}
+				if (event.detail.status === 200){
+					setState((prevState) => ({ ...prevState, isSaveErrored: false, saveMessage: event.detail.message, savedScreenContent: event.detail.data.tours  }))
+					document.getElementById("notifyDiv")?.scrollIntoView()
+				}
+			}
+
+			if (event.detail.contentScriptQuery === "getTours"){
+				if (event.detail.status === 200){
+					setState(prevState => ({ ...prevState, savedScreenContent: event.detail.data }))
+				}
+			}
+
+			if (event.detail.contentScriptQuery === "deleteTour") {
+				if (event.detail.status === 200){
+					setState(prevState => ({ ...prevState, savedScreenContent: event.detail.data.tours }))
+				}
+			}
+		})
+
+		fetchTours()
+	}, [])
 
 	useEffect(() => {
 		console.log("EasyTalk Extension actually started");
@@ -51,7 +84,6 @@ function App() {
 					screen.element = getCSSPath(hoveredRef.target);
 				}
 			});
-			console.log("arr : ", arr);
 			setScreenState((prevState) => ({ ...prevState, walkScreensArr: arr }));
 		}
 	};
@@ -108,6 +140,7 @@ function App() {
 	const handleClose = () => {
 		let myobj = document.getElementById("windowFrame");
 		myobj.remove();
+		window.location.reload()
 	};
 
 	const handleStart = () => {
@@ -154,47 +187,82 @@ function App() {
 		setState((prevState) => ({ ...prevState, expandFlag: true, currentScreen: screenIdx }));
 	}
 
+	const fetchTours = (token) => {
+		let reqOptions = {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		}
+
+		window.dispatchEvent(new CustomEvent("api-req", { detail: {
+				contentScriptQuery: "getTours", 
+				reqOptions: reqOptions,
+				url: "http://localhost:9001/v1/api/tour?token=" + token || state.token,
+			} 
+		}))
+	}
+
 	const handleSaveScreens = () => {
-		console.log(JSON.stringify(screenState.walkScreensArr));
-		// database.ref('users/' + userId).set({
-		// 	username: name,
-		// 	email: email,
-		// 	profile_picture : imageUrl
-		// });
-		// let str = `<script> window.walkScreensArr=${JSON.stringify(screenState.walkScreensArr)} </script>
-		// 		   <script src="https://firebasestorage.googleapis.com/v0/b/easy-platform-adoption-tools.appspot.com/o/easy-platform-adoption-tools.css?alt=media&token=953c081e-076f-4a2e-a862-f44e3e747690"></script>
-		// 		   <script src="https://firebasestorage.googleapis.com/v0/b/easy-platform-adoption-tools.appspot.com/o/easy-platform-adoption-tools.js?alt=media&token=ce290caf-5e26-41d5-b0b4-65e6e68d3279"></script>
-		// 		  `
-		// setState((prevState) => ({ ...prevState, expandFlag: true, savedScreenContent: [prevState.savedScreenContent, str] }));
+
+		if (screenState.tourName.length < 4) {
+			setState((prevState) => ({ ...prevState, isSaveErrored: true, saveMessage: "Please provide a unique tour name atleast 4 char(s) len on the top!" }))
+			document.getElementById("notifyDiv")?.scrollIntoView()
+			return
+		}
 
 		let reqOptions = {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ walkScreensArr: screenState.walkScreensArr, token: state.token })
+			body: JSON.stringify({ tourName: screenState.tourName, walkScreensArr: screenState.walkScreensArr, token: state.token, tourId: screenState.tourId  })
 		}
 
-		chrome.runtime.sendMessage(document.getElementById("extId").innerHTML,{
-				contentScriptQuery: "postTour"
-				, reqOptions: reqOptions
-				, url: "https://localhost:9000/v1/api/tour"
-		}, function (response) {
-			if (!chrome.runtime.lastError) {
-				console.log("lastError : ", response);
+		window.dispatchEvent(new CustomEvent("api-req", { detail: {
+				contentScriptQuery: "postTour", 
+				reqOptions: reqOptions,
+				url: "http://localhost:9001/v1/api/tour",
 			} 
-			
-			if (response != undefined && response != "") {
-				console.log("POST /v1/api/tour SUCCESS : ", response);
-			}
-			else {
-				console.log("POST /v1/api/tour ERR : ", response);
-			}
-		});
+		}))
+
 	};
 
 	const handleTokenChange = (eve) => {
 		setState((prevState) => ({ ...prevState, token: eve.target.value }));
+		fetchTours(eve.target.value)
+	}
+
+	const handleEditTour = (content) => {
+		setScreenState(prevState => ({ ...prevState, tourName: content.tourName, walkScreensArr: content.arr, tourId: content.id }))
+		setState(prevState => ({ ...prevState, currentScreen: 1, isSaveErrored: false, saveMessage: null }))
+	}
+
+	const handleCloseNotifier = (eve) => {
+		setState((prevState) => ({ ...prevState, saveMessage: null }))
+	}
+
+	const handleDeleteTour = (tourContent) => {
+		let reqOptions = {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		}
+		window.dispatchEvent(new CustomEvent("api-req", { detail: {
+				contentScriptQuery: "deleteTour", 
+				reqOptions: reqOptions,
+				url: "http://localhost:9001/v1/api/tour?token=" + state.token + "&tourId=" + tourContent.id,
+			} 
+		}))
+	}
+
+	const handleTourNameChange = (eve) => {
+		setScreenState((prevState) => ({ ...prevState, tourName: eve.target.value }));
+	}
+
+	const handleStartNewTour = () => {
+		setScreenState(prevState => ({ ...prevState, walkScreensArr: [], tourName: "", tourId: null }))
 	}
 
 	const cssStyle = {
@@ -202,8 +270,18 @@ function App() {
 		pointerEvents: "all",
 	};
 
+	let dragBoxHeight = document.querySelector(".dragBox")?.getBoundingClientRect().height
 	return (
-		<Draggable id="dragArea" axis="both" handle=".moveDragArea" defaultPosition={{ x: 0, y: 0 }} onStart={handleStart} onDrag={handleDrag} onStop={handleStop}>
+		<Draggable
+			id="dragArea"
+			axis="both"
+			handle=".moveDragArea"
+			bounds={{ left: 0, top: 0, right: bodyRef.current.right - 370, bottom: bodyRef.current.bottom - dragBoxHeight }}
+			defaultPosition={{ x: 0, y: 0 }}
+			onStart={handleStart}
+			onDrag={handleDrag}
+			onStop={handleStop}>
+			
 			<div className="dragBox" style={{ ...cssStyle }}>
 				<div className="dragBox-titleBar">
 					<div className="dragBox-titleText">
@@ -222,8 +300,12 @@ function App() {
 				{state.currentScreen === 1 && state.expandFlag && (
 					<div className="dragBox-expanded" id="allScreens">
 						{screenState.walkScreensArr.length > 0 && (
-							<div className="dragBox-guide">
-								<div className="dragBox-guide-div">Press 'c' then hover over required element on page then Press 'd' to capture hovered element</div>
+
+							<div className="dragBox-screen">
+								<div className="dragBox-screen-6-input-title">
+									<div className="dragBox-screen-6-input-titleText">Unique tour name</div>
+									<div className="dragBox-screen-6-tourName"><textarea defaultValue={screenState.tourName} style={{ fontSize: "0.9rem" }} placeholder="e.g. Dashboard home tour" onChange={(eve) => handleTourNameChange(eve)} rows={1} /></div>
+								</div>
 							</div>
 						)}
 						<ScreenComponent />
@@ -231,9 +313,22 @@ function App() {
 							<div onClick={handleNewWalkScreen}>Add new screen +</div>
 						</div>
 						{
-							screenState.walkScreensArr.length > 0 &&
+							screenState.tourId && 
 							<div className="dragBox-submit" style={{ marginTop: "5px" }}>
-								<div onClick={handleSaveScreens}>submit</div>
+								<div onClick={handleStartNewTour}>Create new tour +</div>
+							</div>
+						}
+						{
+							screenState.walkScreensArr.length > 0 &&
+							<div className="dragBox-submit" onClick={handleSaveScreens} style={{ marginTop: "5px" }}>
+								<div>submit</div>
+							</div>
+						}
+						{
+							state.saveMessage !== null &&
+							<div className="notifyDiv" id="notifyDiv" style={{ color: state.isSaveErrored? "#F47373": "#37D67A" }}>
+								<div>{state.saveMessage}</div>
+								<div onClick={handleCloseNotifier}> <MdClose /> </div>
 							</div>
 						}
 					</div>
@@ -241,12 +336,24 @@ function App() {
 
 				{
 					state.currentScreen === 2 && state.expandFlag && <div className="dragBox-expanded"> 
+						
 						{
 							state.savedScreenContent.map((content, idx) => {
 								return (
-									<div>
-										<div>Tour - #{idx + 1}</div>
-										<textarea value={content}></textarea>
+									<div className="dragBox-screen">
+										<div className="dragBox-screen-1">
+											<div className="dragBox-screen-1-title">Tour #{idx + 1}</div>
+											<div className="dragBox-screen-1-icons">
+												<MdEdit onClick={() => handleEditTour(content)} />
+												<MdDelete onClick={() => handleDeleteTour(content)} />
+											</div>
+										</div>
+										<div className="dragBox-screen-2">
+											id : { content.id }
+										</div>
+										<div className="dragBox-screen-2">
+											Title : { content.tourName }
+										</div>
 									</div>
 								)
 							})
@@ -259,7 +366,7 @@ function App() {
 					<div className="dragBox-screen-6" style={{ margin: "10px" }}>
 						<div className="dragBox-screen-6-input-title">
 							<div className="dragBox-screen-6-input-titleText">Enter Token</div>
-							<div><textarea style={{ fontSize: "0.9rem" }} placeholder="e.g. 55e4bef7a37b799522b59b9bd4b0791203e75f21" onBlur={handleTokenChange} rows={2} /></div>
+							<div><textarea style={{ fontSize: "0.9rem" }} defaultValue={state.token} placeholder="e.g. 55e4bef7a37b799522b59b9bd4b0791203e75f21" onBlur={handleTokenChange} rows={2} /></div>
 						</div>
 						
 					</div>

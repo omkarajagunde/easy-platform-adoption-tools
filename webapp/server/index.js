@@ -124,7 +124,7 @@ app.prepare().then(() => {
                 let email = req.session.passport.user._json.email
                 let hashPwd = crypto.createHash('sha1').update(email).digest('hex');
 
-                userObj = await UserModel.user.findOne({ email: email });
+                let userObj = await UserModel.user.findOne({ email: email });
                 if (!userObj) {
                     // creating user model/Schema
                     userObj = new UserModel.user({
