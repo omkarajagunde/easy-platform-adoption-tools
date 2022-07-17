@@ -99,7 +99,9 @@ const GenerateToken = () => {
                     </div>
                     <div className="section-generateToken-btn">
                         <FormLabel>Click to copy to clipboard</FormLabel>
-                        <CodeSnippet type="inline" feedback="Copied to clipboard" style={{ width: "max-content", padding: "15px", "background": "white" }}>{ `<script id="beeguide-tools" src="https://localhost:9001/beeGuide.js" data-token="${state.hash}"> </script>`}</CodeSnippet>
+                              <CodeSnippet type="inline" feedback="Copied to clipboard" style={{ width: "max-content", padding: "15px", "background": "white" }}>
+                                  {`<script id="beeguide-tools" src="https://localhost:9001/beeGuide.js"
+    data-token="${state.hash}"> </script>`}</CodeSnippet>
                     </div>
                 </div>
             </div>   

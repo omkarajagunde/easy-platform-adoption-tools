@@ -41,6 +41,7 @@
     position: sticky;
     top: 100px;
     scroll-behavior: smooth;
+    z-index: 99;
 
     .bx--tile-group > div{
         display: flex;
