@@ -27,10 +27,11 @@ function Content(props) {
 				
 			}
 			<div className="title-subtitle-container-btns">
-				{!props.state.flowTriggeredFromHotspots && <button onClick={handleSkipClick}>Skip</button>}
-				{props.state.currentSelectedScreen > 0 && !props.state.flowTriggeredFromHotspots && <button onClick={props.handlePrevious}>Previous</button>}
-				{props.state.currentSelectedScreen < props.state.walkScreensArr.length - 1 && !props.state.flowTriggeredFromHotspots && <button onClick={props.handleNext}>Next</button>}
-				{props.state.flowTriggeredFromHotspots && <button onClick={props.handleBackToHotspots}>Back to Feature spots</button>}
+				{!props.state.flowTriggeredFromHotspots && !props.state.flowTriggeredFromHotspotsByProgram && <button onClick={handleSkipClick}>Skip</button>}
+				{props.state.currentSelectedScreen > 0 && !props.state.flowTriggeredFromHotspots && !props.state.flowTriggeredFromHotspotsByProgram && <button onClick={props.handlePrevious}>Previous</button>}
+				{props.state.currentSelectedScreen < props.state.walkScreensArr.length - 1 && !props.state.flowTriggeredFromHotspots && !props.state.flowTriggeredFromHotspotsByProgram && <button onClick={props.handleNext}>Next</button>}
+				{props.state.flowTriggeredFromHotspots && !props.state.flowTriggeredFromHotspotsByProgram && <button onClick={props.handleBackToHotspots}>Back to Feature spots</button>}
+				{props.state.flowTriggeredFromHotspotsByProgram && <button onClick={handleSkipClick}>close</button>}
 			</div>
 		</div>
 	);

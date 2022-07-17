@@ -19,6 +19,22 @@ const SiteLayout = ({ children }) => {
     setState(prevState => ({ ...prevState, currentTab: tabIdx }))
   }
 
+  useEffect(() => {
+    let path = window.location.pathname
+    if (path === "/overview") {
+      setState(prevState => ({ ...prevState, currentTab: 0 }))
+    }
+    if (path === "/pricing") {
+      setState(prevState => ({ ...prevState, currentTab: 1 }))
+    }
+    if (path === "/about") {
+      setState(prevState => ({ ...prevState, currentTab: 2 }))
+    }
+    if (path === "/generateToken") {
+      setState(prevState => ({ ...prevState, currentTab: 3 }))
+    }
+  }, [])
+
   return (
     <div className="App">
       <Header aria-label="IBM Platform Name">

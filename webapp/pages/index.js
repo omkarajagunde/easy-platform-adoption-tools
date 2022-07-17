@@ -109,9 +109,8 @@ function index() {
                         <div className="section-2-title" style={{ lineHeight: "2.2rem", fontSize: "1rem" }}>
                             1. To to <Link href='/generateToken'>Genrate Token page</Link> Signup/Sign in with your IBMid then a token will be generated for you <br/>
                             2. Place this token in below script and to integrate tours just copy paste below  <CodeSnippet type="inline">{"<script/>"}</CodeSnippet> tag in your root index.html or js file<br />
-                            3. Call <CodeSnippet type="inline">{ "window.initBee()" }</CodeSnippet> to initialise all tours in your website<br />
-                            4. Call <CodeSnippet type="inline">{"window.triggerBeeTour(<tourId>)"}</CodeSnippet> to initialise particular tour on particular web page/ route<br/>
-                            5. Call <CodeSnippet type="inline">{"window.triggerBeeSpot(<tourId>, <screenIndex>)"}</CodeSnippet> to show hotspot for a feature.
+                            3. Call <CodeSnippet type="inline">{"window.beeTour(<tourId>)"}</CodeSnippet> to initialise particular tour on particular web page/ route<br/>
+                            4. Call <CodeSnippet type="inline">{"window.beeSpot(<tourId>, <screenIndex>)"}</CodeSnippet> to show hotspot for a feature.
                         </div>
                         <div className="section-generateToken-btn">
                             <FormLabel>Click to copy to clipboard</FormLabel>

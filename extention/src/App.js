@@ -82,6 +82,7 @@ function App() {
 			arr.forEach((screen, idx) => {
 				if (idx === screenState.currentSelectedScreen) {
 					screen.element = getCSSPath(hoveredRef.target);
+					console.log(hoveredRef.target, " :::: ", hoveredRef.target.getBoundingClientRect());
 				}
 			});
 			setScreenState((prevState) => ({ ...prevState, walkScreensArr: arr }));
@@ -90,7 +91,9 @@ function App() {
 
 	const handleMouseMoveEvent = (e) => {
 		if (keyRef.target === "c" && screenState.walkScreensArr.length > 0) {
-			hoveredRef.target = document.elementFromPoint(e.clientX, e.clientY);
+			var scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+			hoveredRef.target = document.elementFromAbsolutePoint(e.clientX, e.clientY + scrollTop);
+
 			let currScreenSettings = screenState.walkScreensArr[screenState.currentSelectedScreen];
 			// Remove old bounding boxes on the screen
 			let oldelem = document.getElementById("selectionpart");
@@ -103,7 +106,7 @@ function App() {
 			let div1 = document.createElement("div");
 			div1.setAttribute("id", "selectionpart");
 			div1.classList.add("selectionpart");
-			div1.style.top = `${sizes.top - 10}px`;
+			div1.style.top = `${(sizes.top + scrollTop) - 10}px`;
 			div1.style.left = `${sizes.left - 10}px`;
 			div1.style.width = `${sizes.width + 20}px`;
 			div1.style.height = `${sizes.height + 20}px`;
@@ -294,7 +297,7 @@ function App() {
 				<div className="dragBox-menu">
 					<div onClick={() => handleToggleScreen(1)}>Screens</div>
 					<div onClick={() => handleToggleScreen(2)}>Saved</div>
-					<div onClick={() => handleToggleScreen(3)}>About</div>
+					<div onClick={() => handleToggleScreen(3)}>Settings</div>
 				</div>
 
 				{state.currentScreen === 1 && state.expandFlag && (

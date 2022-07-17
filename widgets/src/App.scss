@@ -11,14 +11,14 @@
   font-size: 15px;
 }
 
-.epat-toolbox{
+.beeGuide-toolbox{
     position: fixed;
-    top: 300px;
     right: 0px;
     background: blue;
     padding: 10px;
     color: white;
     cursor: pointer;
+    font-size: 10px;
 
     &-fulltour{
         margin: 0px 0px 8px 0px;
@@ -27,7 +27,7 @@
     }
 
     &-title{
-        padding-bottom: 5px;
+        
     }
 
     &-launchBtn{

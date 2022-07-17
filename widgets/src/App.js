@@ -2,18 +2,29 @@ import { useState, useEffect } from "react"
 import './App.scss';
 import ProductTour from './components/ProductTour';
 
-function App(props) {
-  const [state, setState] = useState({
-    tours: null,
-    selectedTourArr: null,
-    selectedFeatureSpotIndex: 0,
-  })
+import React, { Component } from 'react'
 
-  useEffect(() => {
-    console.log("BeeGuide :: ", state);
-  }, [state.tours])
+export default class App extends Component {
 
-  useEffect(() => {
+  constructor(props) {
+    super(props)
+    this.state = {
+      tours: [],
+      selectedTourArr: [],
+      selectedFeatureSpotIndex: 0,
+      hotspotsActivated: false,
+      flowTriggeredFromHotspotsByProgram: false,
+      flowTriggeredFromHotspots: false
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState !== this.state) {
+      console.log("BeeGuide State :: ", this.state);
+    }
+  }
+
+  componentDidMount() {
     // check if token is passed and get the tours for attached token account
     let scriptElem = document.getElementById("beeguide-tools")
     if (!scriptElem) {
@@ -31,43 +42,53 @@ function App(props) {
       .then(response => response.json())
       .then(response => {
         console.log("[BeeGuide logs] :: Response for GET method :: ", response.data);
-        setState((prevState) => ({ ...prevState, tours: response.data }))
+        this.setState({tours: response.data })
         window.tours = response.data
       })
       .catch(error => console.log('[BeeGuide logs] :: Error for GET method :: ', error))
     
-    window.triggerBeeTour = handleTriggerBeeTour
-    window.triggerBeeSpot = handleTriggerBeeSpot
-  }, [])
+    window.BeeGuide = this
+  }
 
-  const handleTriggerBeeTour = (tourId) => {
-    window.tours.forEach(tour => {
+  beeTour = (tourId) => {
+    if (!(typeof tourId === "string") || !(tourId.length > 5)) {
+      console.log("[BeeGuide logs] :: tourId is not passed correctly, it should be string id")
+      return
+    }
+    this.state.tours.forEach(tour => {
       if (tourId === tour.id) {
-        setState(prevState => ({ ...prevState, selectedTourArr: tour.arr }))
+        this.setState({ selectedTourArr: tour.arr, selectedFeatureSpotIndex: 0, flowTriggeredFromHotspots: false, flowTriggeredFromHotspotsByProgram: false, hotspotsActivated: false })
+
       }
     })
   }
 
-  const handleTriggerBeeSpot = (tourId, screenIdx) => {
-    window.tours.forEach(tour => {
+  beeSpot = (tourId, screenIdx = 0, activationFlag = true) => {
+    if (!(typeof tourId === "string")  || !(tourId.length > 5)) {
+      console.log("[BeeGuide logs] :: tourId is not passed correctly, it should be string id")
+      return
+    }
+    this.state.tours.forEach(tour => {
       if (tourId === tour.id) {
-        setState(prevState => ({ ...prevState, selectedTourArr: tour.arr, selectedFeatureSpotIndex: screenIdx }))
+        this.setState({ selectedTourArr: tour.arr, selectedFeatureSpotIndex: !activationFlag? -1: screenIdx, flowTriggeredFromHotspotsByProgram: activationFlag, hotspotsActivated: false })
       }
     })
   }
 
-  return (
-    <div className="platformAdoptionApp" id="windowFrame">
-      {
-        state.tours !== null ?
-          <ProductTour
-            tours={state.tours}
-            selectedTourArr={state.selectedTourArr}
-            selectedFeatureSpotIndex={state.selectedFeatureSpotIndex} />
-        : ""  
-      }
-    </div>
-  );
+  render() {
+    return (
+      <div className="platformAdoptionApp" id="windowFrame">
+        {
+          this.state.tours !== null ?
+            <ProductTour
+              tours={this.state.tours}
+              selectedTourArr={this.state.selectedTourArr}
+              flowTriggeredFromHotspots={this.state.flowTriggeredFromHotspots}
+              flowTriggeredFromHotspotsByProgram={this.state.flowTriggeredFromHotspotsByProgram}
+              selectedFeatureSpotIndex={this.state.selectedFeatureSpotIndex} />
+          : ""  
+        }
+      </div>
+    )
+  }
 }
-
-export default App;

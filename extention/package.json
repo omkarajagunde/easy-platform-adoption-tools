@@ -10,6 +10,7 @@
     "carbon-components": "^10.56.0",
     "carbon-components-react": "^7.18.0",
     "carbon-icons": "^7.0.7",
+    "element-from-absolute-point": "0.0.4",
     "faker": "^5.1.0",
     "firebase": "^9.8.2",
     "leader-line": "^1.0.7",
@@ -26,7 +27,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "export INLINE_RUNTIME_CHUNK=false && react-scripts build",
+    "build": "export INLINE_RUNTIME_CHUNK=false && react-scripts build && npm run zip-build",
+    "zip-build": "zip -r BeeGuide build/",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

@@ -94,9 +94,8 @@ const GenerateToken = () => {
                 <div className="section-rightSide">
                     <div className="section-2-title" style={{ lineHeight: "2rem", fontSize: "1.1rem", maxWidth: "800px" }}>
                         To integrate tours just copy paste below  <CodeSnippet type="inline">{ "<script/>" }</CodeSnippet> tag in your root index.html or js file<br />
-                        1. <CodeSnippet type="inline">{ "window.initBee()" }</CodeSnippet> to initialise all tours in your website<br />
-                        2. <CodeSnippet type="inline">{"window.triggerBeeTour(<tourId>)"}</CodeSnippet> to initialise particular tour on particular web page/ route<br/>
-                        3. <CodeSnippet type="inline">{"window.triggerBeeSpot(<tourId>, <screenIndex>)"}</CodeSnippet> to show hotspot for a feature.
+                        1. <CodeSnippet type="inline">{"window.beeTour(<tourId>)"}</CodeSnippet> to initialise particular tour on particular web page/ route<br/>
+                        2. <CodeSnippet type="inline">{"window.beeSpot(<tourId>, <screenIndex>)"}</CodeSnippet> to show hotspot for a feature.
                     </div>
                     <div className="section-generateToken-btn">
                         <FormLabel>Click to copy to clipboard</FormLabel>

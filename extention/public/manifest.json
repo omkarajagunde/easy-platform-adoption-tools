@@ -1,12 +1,12 @@
 {
     "manifest_version": 3,
-    "name": "BeeGuide - Make beautiful app feature walkthroughs",
+    "name": "BeeGuide",
     "description": "Chrome extension that is used for creating immersive and quick product tours",
     "version": "1.0.0",
     "icons": {
-        "16": "bee.svg",
-        "48": "bee.svg",
-        "128":"bee.svg"
+        "16": "bee.png",
+        "48": "bee.png",
+        "128":"bee.png"
     },
     "action": {
         "default_icon": "favicon.ico",

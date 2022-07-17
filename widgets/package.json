@@ -18,10 +18,12 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:prod": "node ./build-rewired.js && npm run clean && npm run move-index",
+    "build:prod": "node ./build-rewired.js && npm run clean && npm run move-index && npm run move-files",
     "move-prescripts": "uglifyjs public/leader-line.min.js public/plain-draggable.min.js build/temp.js -o build/beeguide-tools.js",
     "clean": "cd build && mv static/js/*.js temp.js && mv static/css/*.css beeguide-tools.css && npm run move-prescripts && rm -r static",
-    "move-index": "cp public/index.html build/index.html"
+    "move-index": "cp public/index.html build/index.html",
+    "move-files": "cp build/beeguide-tools.* ../webapp/public",
+    "load-css": "cd public && REPLACE_TEXT=$(cat ../build/beeguide-tools.css) && sed -i '' 's|BEEGUIDE_TOOLS_CSS|$(REPLACE_TEXT)|g' loadCss.js"
   },
   "devDependencies": {
     "sass": "^1.52.0"

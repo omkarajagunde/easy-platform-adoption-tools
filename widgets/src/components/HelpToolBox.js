@@ -1,20 +1,19 @@
 import React from 'react'
-
 function HelpToolBox(props) {
   return (
     <div>
-        <div onClick={props.handleHelpToolBoxClick} className="epat-toolbox-title">
-            Help?
+        <div onClick={props.handleHelpToolBoxClick} className="beeGuide-toolbox-title">
+            BeeGuide?
         </div>
         {
             props.state.expandHelpToolbar &&
-            <div>
+            <div style={{ marginTop: "5px", borderTop: "1px solid white" }}>
                 <div>
-                    <div className="epat-toolbox-fulltour" >
+                    <div className="beeGuide-toolbox-fulltour" >
                         Full Tour?
                     </div>
                     <div>
-                        <button className="epat-toolbox-launchBtn" onClick={props.handleFullTourCheckbox}>
+                        <button className="beeGuide-toolbox-launchBtn" onClick={props.handleFullTourCheckbox}>
                             Launch
                         </button>
                     </div>

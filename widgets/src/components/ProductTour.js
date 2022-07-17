@@ -12,7 +12,9 @@ function ProductTour(props) {
 		currentSelectedScreen: 0,
         expandHelpToolbar: false,
         hotspotsActivated: false,
-        flowTriggeredFromHotspots: false
+		flowTriggeredFromHotspots: false,
+		flowTriggeredFromHotspotsByProgram: false,
+		helpBoxPos: 200
 	});
 	const lineRef = useRef(null);
 	const draggableRef = useRef(null);
@@ -35,6 +37,17 @@ function ProductTour(props) {
 		};
 	}, [state]);
 
+	useEffect(() => {
+		console.log("BeeGuide Props :: ", props);
+		setState(prevState => ({
+			...prevState,
+			walkScreensArr: props.selectedTourArr,
+			currentSelectedScreen: props.selectedFeatureSpotIndex,
+			flowTriggeredFromHotspots: props.flowTriggeredFromHotspots,
+			flowTriggeredFromHotspotsByProgram: props.flowTriggeredFromHotspotsByProgram
+		}))
+	}, [props]);
+
 	const handlePrevious = () => {
 		setState((prevState) => ({ ...prevState, currentSelectedScreen: prevState.currentSelectedScreen - 1 }));
 	};
@@ -44,7 +57,7 @@ function ProductTour(props) {
 	};
 
     const handleSkipClick = () => {
-        setState((prevState) => ({ ...prevState, currentSelectedScreen: -1 }));
+        setState((prevState) => ({ ...prevState, currentSelectedScreen: -1, flowTriggeredFromHotspotsByProgram: false }));
     }
 
 	const handleContentDrag = (newPosition) => {
@@ -56,12 +69,10 @@ function ProductTour(props) {
 			}
 		});
 
-		//setstate((prevState) => ({ ...prevState, walkScreensArr: arr }));
 		lineRef.target.position();
 	};
 
 	const renderHighlighter = () => {
-		console.log(state);
         window.scrollTop = 0
 		// Remove old bounding boxes on the screen
 		let oldelem = document.getElementById("selectionpart");
@@ -123,26 +134,26 @@ function ProductTour(props) {
                     handleBackToHotspots={handleBackToHotspots}
                     state={state} 
                     currScreenSettings={currScreenSettings} />, 
-                    div2
+				div2,
+				() => {
+					lineRef.target = new window.LeaderLine(div2, div1);
+					lineRef.target.setOptions({
+						color: "white",
+						dash: { animation: true },
+						endPlug: currScreenSettings.arrowType
+					});
+
+					//Make Content -> div2 draggable
+					draggableRef.target = new window.PlainDraggable(div2);
+					draggableRef.target.draggingClass = "";
+					draggableRef.target.movingClass = "";
+					draggableRef.target.draggableClass = "";
+					draggableRef.target.onMove = handleContentDrag;
+
+					draggableRef.target.position()
+					lineRef.target.position();
+				}
             );
-
-			lineRef.target = new window.LeaderLine(div2, div1);
-			lineRef.target.setOptions({
-				color: "white",
-				dash: { animation: true },
-				startSocket: "auto",
-				endPlug: currScreenSettings.arrowType
-			});
-
-			// Make Content -> div2 draggable
-			draggableRef.target = new window.PlainDraggable(div2);
-			draggableRef.target.draggingClass = "";
-			draggableRef.target.movingClass = "";
-			draggableRef.target.draggableClass = "";
-			draggableRef.target.onMove = handleContentDrag;
-
-			draggableRef.target.position()
-			lineRef.target.position();
 		}
 
         if (state.hotspotsActivated){
@@ -165,18 +176,23 @@ function ProductTour(props) {
 
 
         if (state.currentSelectedScreen === -1){
-            let helpToolBox = document.createElement("div");
+			let helpToolBox = document.createElement("div");
+			helpToolBox.style.top =  state.helpBoxPos + "px"
 			helpToolBox.setAttribute("id", "helpToolBox");
-			helpToolBox.classList.add("epat-toolbox");
+			helpToolBox.classList.add("beeGuide-toolbox");
             document.body.appendChild(helpToolBox);
             let dragToolBox = new window.PlainDraggable(helpToolBox)
-            dragToolBox.containment = {left: 0, top: 0, width: 0, height:"100%" };
-            ReactDOM.render(
-                <HelpToolBox 
-                    handleFullTourCheckbox={handleFullTourCheckbox} 
-                    handleHelpToolBoxClick={handleHelpToolBoxClick} 
-                    handleHotspots={handleHotspots}
-                    state={state} />, 
+			dragToolBox.containment = { left: 0, top: 0, width: 0, height: "100%" };
+			dragToolBox.onDrag = (newPos) => {
+				console.log(newPos);
+				setState(prevState=> ({...prevState, helpBoxPos: newPos.top}))
+			}
+			ReactDOM.render(
+				<HelpToolBox 
+					handleFullTourCheckbox={handleFullTourCheckbox} 
+					handleHelpToolBoxClick={handleHelpToolBoxClick} 
+					handleHotspots={handleHotspots}
+					state={state} />, 
                 helpToolBox
             );
         }
@@ -216,10 +232,8 @@ function ProductTour(props) {
     }
 
     const handleBackToHotspots = () => {
-        setState(prevState => {
-            return { ...prevState, hotspotsActivated: !prevState.hotspotsActivated, flowTriggeredFromHotspots: false, expandHelpToolbar: true }
-        })
-    }
+        setState(prevState => ({ ...prevState, currentSelectedScreen: -1, hotspotsActivated: true, flowTriggeredFromHotspots: false }))
+	}
 
 	return (
 		<div>

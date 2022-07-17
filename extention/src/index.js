@@ -4,6 +4,29 @@ import App from "./App";
 import { ScreenContext } from "./contexts/ScreenContext";
 import Content from "./components/Content";
 
+(function() {
+  'use strict';
+  var api;
+  api = function(x,y) {
+    var elm, scrollX, scrollY, newX, newY;
+    /* stash current Window Scroll */
+    scrollX = window.pageXOffset;
+    scrollY = window.pageYOffset;
+    /* scroll to element */
+    window.scrollTo(x,y);
+    /* calculate new relative element coordinates */
+    newX = x - window.pageXOffset;
+    newY = y - window.pageYOffset;
+    /* grab the element */
+    elm = this.elementFromPoint(newX,newY);
+    /* revert to the previous scroll location */
+    window.scrollTo(scrollX,scrollY);
+    /* returned the grabbed element at the absolute coordinates */
+    return elm;
+  };
+  document.elementFromAbsolutePoint = api;
+}).call(this);
+
 function AppWrapper({ props }) {
 	const [screenState, setScreenState] = useState({
 		walkScreensArr: [],
@@ -77,11 +100,13 @@ function AppWrapper({ props }) {
 		let toggledSelection = document.querySelector(currScreenSettings?.element || null);
 
 		if (toggledSelection) {
+			toggledSelection.scrollIntoView()
 			let sizes = toggledSelection.getBoundingClientRect();
+			var scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
 			let div1 = document.createElement("div");
 			div1.setAttribute("id", "selectionpart");
 			div1.classList.add("selectionpart");
-			div1.style.top = `${sizes.top - 10}px`;
+			div1.style.top = `${(sizes.top + scrollTop)- 10}px`;
 			div1.style.left = `${sizes.left - 10}px`;
 			div1.style.width = `${sizes.width + 20}px`;
 			div1.style.height = `${sizes.height + 20}px`;
@@ -95,25 +120,34 @@ function AppWrapper({ props }) {
 			div2.style.left = currScreenSettings.dragged ? `${currScreenSettings.draggedSizes.left}px` : `${sizes.left - 5}px`;
 			document.body.appendChild(div2);
 
-			ReactDOM.render(<Content handlePrevious={handlePrevious} handleNext={handleNext} screenState={screenState} currScreenSettings={currScreenSettings} />, div2);
+			ReactDOM.render(
+				<Content
+					handlePrevious={handlePrevious}
+					handleNext={handleNext}
+					screenState={screenState}
+					currScreenSettings={currScreenSettings} />,
+				div2,
+				() => {
 
-			lineRef.target = new window.LeaderLine(div2, div1);
-			lineRef.target.setOptions({
-				color: "white",
-				dash: { animation: true },
-				startSocket: "auto",
-				endPlug: currScreenSettings.arrowType
+				lineRef.target = new window.LeaderLine(div2, div1);
+				lineRef.target.setOptions({
+					color: "white",
+					dash: { animation: true },
+					startSocket: "auto",
+					endPlug: currScreenSettings.arrowType
+				});
+
+				// Make Content -> div2 draggable
+				draggableRef.target = new window.PlainDraggable(div2);
+				draggableRef.target.draggingClass = "";
+				draggableRef.target.movingClass = "";
+				draggableRef.target.draggableClass = "";
+				draggableRef.target.onMove = handleContentDrag;
+
+				draggableRef.target.position()
+				lineRef.target.position();
+
 			});
-
-			// Make Content -> div2 draggable
-			draggableRef.target = new window.PlainDraggable(div2);
-			draggableRef.target.draggingClass = "";
-			draggableRef.target.movingClass = "";
-			draggableRef.target.draggableClass = "";
-			draggableRef.target.onMove = handleContentDrag;
-
-			draggableRef.target.position()
-			lineRef.target.position();
 		}
 	};
 
